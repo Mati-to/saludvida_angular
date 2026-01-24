@@ -1,0 +1,30 @@
+
+
+<div>
+    <div class="row">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Nombre</th>
+            </tr>
+            </thead>
+            <tbody>
+                @for (e of especialidades; track e.id) {
+                    <tr>
+                        <td>{{e.nombre}}</td>
+                        <td class="d-flex gap-2 justify-content-end">
+                            <a class="btn btn-sm btn-outline-secondary" href="#">Editar</a>
+                            <button
+                                class="btn btn-sm btn-outline-danger"
+                                (click)="solicitarEliminar(e)">Eliminar</button>
+                        </td>
+                    </tr>
+                } @empty {
+                    <tr>
+                        <td colspan="6">No hay especialidades médicas aun.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

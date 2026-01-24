@@ -1,19 +1,21 @@
 
 
 
-<form [formGroup]="formEspecialidad" (ngSubmit)="onSubmit()" class="row g-3">
+<form [formGroup]="formEspecialidad" (ngSubmit)="enviarEspecialidad()" class="">
 
-    <div class="col-md-4">
-        <label for="nombre">Nombre</label>
-        <input type="text" name="nombre" id="nombre" formControlName="nombre" />
+    <div class="mb-3">
+        <label for="nombre" class="form-label">Nombre</label>
+        <input type="text" class="form-control" id="nombre" formControlName="nombre">
     </div>
 
-    <div class="col-12">
+    <div class="d-flex gap-1">
         <button
-            class="btn btn-success"
             type="submit"
+            class="btn btn-primary"
             [disabled]="!formEspecialidad.valid">Guardar</button>
-        <a class="btn btn-secondary" href="#">Volver</a>
+        <a class="btn btn-secondary" routerLink="/especialidades">Volver</a>
     </div>
+
+
 </form>
 

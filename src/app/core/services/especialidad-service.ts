@@ -1,27 +1,26 @@
-import { Injectable } from '@angular/core';
-import {EspecialidadModel} from '../models/especialidadModel';
-import {Observable, of} from 'rxjs';
+import {inject, Injectable} from '@angular/core';
+import {EspecialidadResponse} from '../models/especialidad-response';
+import {Observable} from 'rxjs';
+import {HttpClient} from '@angular/common/http';
+import {EspecialidadRequest} from '../models/especialidad-request';
 
 @Injectable({
   providedIn: 'root',
 })
 export class EspecialidadService {
-    private especialidades: EspecialidadModel[] = [
-        { nombre: "Kinesiología" },
-        { nombre: "Medicina general" },
-    ];
+    private http: HttpClient = inject(HttpClient);
+    private apiUrl: string = "http://localhost:8080/api/especialidad";
 
-    getAll(): Observable<EspecialidadModel[]> {
-        return of(this.especialidades);
+    getAll(): Observable<EspecialidadResponse[]> {
+        return this.http.get<EspecialidadResponse[]>(this.apiUrl);
     }
 
-    create(especialidad: EspecialidadModel): Observable<EspecialidadModel> {
-        const nueva: EspecialidadModel = {
-            nombre: especialidad.nombre,
-        };
+    create(especialidad: EspecialidadRequest): Observable<EspecialidadResponse> {
+        return this.http.post<EspecialidadResponse>(this.apiUrl, especialidad);
+    }
 
-        this.especialidades = [...this.especialidades, nueva];
-        return of(nueva);
+    deleteById(id: number): Observable<Object> {
+        return this.http.delete(`${this.apiUrl}/${id}`);
     }
 
 }

@@ -1,44 +1,29 @@
-import {Component} from '@angular/core';
+import {Component, EventEmitter, Output} from '@angular/core';
 import {ReactiveFormsModule, FormControl, FormGroup, Validators} from '@angular/forms';
-import {EspecialidadModel} from '../../../core/models/especialidadModel';
-import {EspecialidadService} from '../../../core/services/especialidad-service';
-import {Router} from '@angular/router';
+import {RouterLink} from '@angular/router';
+import {EspecialidadRequest} from '../../../core/models/especialidad-request';
 
 @Component({
   selector: 'app-especialidad-form',
-  imports: [ReactiveFormsModule],
+    imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './especialidad-form.html',
   styleUrl: './especialidad-form.scss',
 })
 export class EspecialidadForm {
 
-    constructor(
-        private especialidadService: EspecialidadService,
-        private router: Router,
-    ) { }
-
+    // Formulario
     formEspecialidad = new FormGroup({
         nombre: new FormControl<string>("",
             {nonNullable: true, validators: [Validators.required]}),
     })
 
-    onSubmit():void {
-        if (this.formEspecialidad.invalid) return;
-        const nuevaEspecialidad: EspecialidadModel = {
-            nombre: this.formEspecialidad.value.nombre as string
-        };
+    @Output()
+    onGuardarEspecialidad = new EventEmitter<EspecialidadRequest>();
 
-        this.especialidadService
-            .create(nuevaEspecialidad)
-            .subscribe({
-                next: (res) => {
-                    console.log("Guardado: ", res);
-                    this.router.navigateByUrl("/especialidades").then(redirect => {
-                        if (redirect) console.log("Redirección exitosa...")
-                        else console.error("Error en la redirección...");
-                    })
-                },
-                error: (err) => console.error(err)
-            });
+    enviarEspecialidad(): void {
+        if (this.formEspecialidad.invalid) return;
+        this.onGuardarEspecialidad.emit(this.formEspecialidad.getRawValue());
+        this.formEspecialidad.reset();
     }
+
 }
