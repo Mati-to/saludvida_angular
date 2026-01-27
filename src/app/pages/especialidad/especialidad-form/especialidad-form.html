@@ -1,0 +1,31 @@
+
+<h4> {{ modo === 'crear' ? "Crear especialidad" : "Editar especialidad" }}</h4>
+
+
+<form [formGroup]="formEspecialidad" (ngSubmit)="enviarEspecialidad()" class="">
+
+    <div class="mb-3">
+        <label for="nombre" class="form-label">Nombre</label>
+        <input type="text" class="form-control" id="nombre" formControlName="nombre">
+    </div>
+
+    <div class="d-flex gap-1">
+        <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="!formEspecialidad.valid">
+            {{ modo === 'crear' ? "Crear" : "Guardar cambios" }}
+        </button>
+        @if (modo === "editar") {
+            <button
+                type="button"
+                class="btn btn-secondary"
+                (click)="cancelar.emit()">
+                Volver
+            </button>
+        }
+    </div>
+
+
+</form>
+
