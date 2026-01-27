@@ -1,14 +1,17 @@
-<h4>{{titulo}}</h4>
 
 <div class="container-fluid">
     <div class="row">
         <app-especialidad-list
             class="col-8"
             [especialidades]="especialidades"
+            (editarEspecialidadEvent)="editarEspecialidad($event)"
             (eliminarEspecialidadEvent)="modalConfirmarEliminacion($event)"></app-especialidad-list>
 
         <app-especialidad-form
             class="col-4"
+            [modo]="modoForm"
+            [especialidad]="especialidadSeleccionada"
+            (cancelar)="modoCrear()"
             (onGuardarEspecialidad)="guardarEspecialidad($event)"></app-especialidad-form>
     </div>
 </div>

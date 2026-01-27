@@ -12,11 +12,18 @@ export class EspecialidadList {
     especialidades: EspecialidadResponse[] = [];
 
     @Output()
+    editarEspecialidadEvent = new EventEmitter<EspecialidadResponse>();
+
+    @Output()
     eliminarEspecialidadEvent = new EventEmitter<EspecialidadResponse>();
 
 
     solicitarEliminar(especialidad: EspecialidadResponse): void {
         this.eliminarEspecialidadEvent.emit(especialidad);
+    }
+
+    solicitarEditar(especialidad: EspecialidadResponse): void {
+        this.editarEspecialidadEvent.emit(especialidad);
     }
 
 }

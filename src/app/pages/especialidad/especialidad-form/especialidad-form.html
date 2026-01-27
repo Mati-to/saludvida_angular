@@ -1,4 +1,5 @@
 
+<h4> {{ modo === 'crear' ? "Crear especialidad" : "Editar especialidad" }}</h4>
 
 
 <form [formGroup]="formEspecialidad" (ngSubmit)="enviarEspecialidad()" class="">
@@ -12,8 +13,17 @@
         <button
             type="submit"
             class="btn btn-primary"
-            [disabled]="!formEspecialidad.valid">Guardar</button>
-        <a class="btn btn-secondary" routerLink="/especialidades">Volver</a>
+            [disabled]="!formEspecialidad.valid">
+            {{ modo === 'crear' ? "Crear" : "Guardar cambios" }}
+        </button>
+        @if (modo === "editar") {
+            <button
+                type="button"
+                class="btn btn-secondary"
+                (click)="cancelar.emit()">
+                Volver
+            </button>
+        }
     </div>
 
 

@@ -19,6 +19,10 @@ export class EspecialidadService {
         return this.http.post<EspecialidadResponse>(this.apiUrl, especialidad);
     }
 
+    update(especialidad: EspecialidadRequest, id: number): Observable<EspecialidadResponse> {
+        return this.http.put<EspecialidadResponse>(`${this.apiUrl}/${id}`, especialidad);
+    }
+
     deleteById(id: number): Observable<Object> {
         return this.http.delete(`${this.apiUrl}/${id}`);
     }

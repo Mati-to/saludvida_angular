@@ -1,4 +1,4 @@
-
+<h4>Especialidades médicas</h4>
 
 <div>
     <div class="row">
@@ -13,7 +13,9 @@
                     <tr>
                         <td>{{e.nombre}}</td>
                         <td class="d-flex gap-2 justify-content-end">
-                            <a class="btn btn-sm btn-outline-secondary" href="#">Editar</a>
+                            <button
+                                class="btn btn-sm btn-outline-secondary"
+                                (click)="solicitarEditar(e)">Editar</button>
                             <button
                                 class="btn btn-sm btn-outline-danger"
                                 (click)="solicitarEliminar(e)">Eliminar</button>
