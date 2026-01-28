@@ -1,15 +1,16 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {EspecialidadResponse} from '../../core/models/especialidad-response';
+import {EspecialidadResponse, EspecialidadRequest} from '../../core/models/especialidad-model';
 import {EspecialidadService} from '../../core/services/especialidad-service';
 import {EspecialidadList} from './especialidad-list/especialidad-list';
 import {EspecialidadForm} from './especialidad-form/especialidad-form';
-import {EspecialidadRequest} from '../../core/models/especialidad-request';
+import {ModalConfirmarEliminar} from '../../shared/components/modal-confirmar-eliminar/modal-confirmar-eliminar';
 
 @Component({
   selector: 'app-especialidad',
     imports: [
         EspecialidadList,
-        EspecialidadForm
+        EspecialidadForm,
+        ModalConfirmarEliminar
     ],
   templateUrl: './especialidad.component.html',
   styleUrl: './especialidad.component.scss',

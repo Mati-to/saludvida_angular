@@ -1,0 +1,62 @@
+
+
+
+<h4> {{ modo === 'crear' ? "Ingresar médico" : "Editar médico" }}</h4>
+
+
+<form [formGroup]="formMedico" (ngSubmit)="enviarMedico()" class="">
+
+    <div class="mb-3">
+        <label for="nombre" class="form-label">Nombre</label>
+        <input type="text" class="form-control form-control-sm" id="nombre" formControlName="nombre">
+    </div>
+    <div class="mb-3">
+        <label for="apellido" class="form-label">Apellido</label>
+        <input type="text" class="form-control form-control-sm" id="apellido" formControlName="apellido">
+    </div>
+    <div class="mb-3">
+        <label for="correo" class="form-label">Correo</label>
+        <input type="email" class="form-control form-control-sm" id="correo" formControlName="correo">
+    </div>
+    <div class="mb-3">
+        <label for="rut" class="form-label">RUT</label>
+        <input type="text" class="form-control form-control-sm" id="rut" formControlName="rut">
+    </div>
+    <div class="mb-3">
+        <label for="telefono" class="form-label">Teléfono</label>
+        <input type="text" class="form-control form-control-sm" id="telefono" formControlName="telefono">
+    </div>
+    <div class="mb-3">
+        <label for="especialidad" class="form-label">Especialidad médica</label>
+        <select name="especialidad" id="especialidad" class="form-select form-select-sm" formControlName="especialidadId">
+            <option [ngValue]="null" disabled>Selecciona una Especialidad</option>
+
+            @for (e of especialidades; track e.nombre) {
+                <option [ngValue]="e.id">{{e.nombre}}</option>
+            }
+        </select>
+    </div>
+
+
+    <!--Botones-->
+    <div class="d-flex gap-1">
+        <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="!formMedico.valid">
+            {{ modo === 'crear' ? "Ingresar" : "Guardar cambios" }}
+        </button>
+        @if (modo === "editar") {
+            <button
+                type="button"
+                class="btn btn-secondary"
+                (click)="cancelar.emit()">
+                Volver
+            </button>
+        }
+    </div>
+
+
+</form>
+
+

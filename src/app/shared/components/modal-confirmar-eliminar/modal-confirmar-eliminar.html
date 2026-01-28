@@ -1,0 +1,19 @@
+
+
+
+<div class="modal fade show d-block">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Confirmar eliminación</h5>
+            </div>
+            <div class="modal-body">
+                ¿Eliminar <strong>{{ entidadSeleccionada }}</strong>?
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" (click)="onCancelar()">Cancelar</button>
+                <button class="btn btn-danger" (click)="onConfirmar()">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>

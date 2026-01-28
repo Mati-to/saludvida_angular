@@ -1,8 +1,7 @@
 import {inject, Injectable} from '@angular/core';
-import {EspecialidadResponse} from '../models/especialidad-response';
+import {EspecialidadResponse, EspecialidadRequest} from '../models/especialidad-model';
 import {Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
-import {EspecialidadRequest} from '../models/especialidad-request';
 
 @Injectable({
   providedIn: 'root',

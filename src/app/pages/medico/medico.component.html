@@ -1,0 +1,30 @@
+<div class="container-fluid">
+    <div class="row">
+        <app-medico-list
+            class="col-8"
+            [medicos]="medicos">
+
+        </app-medico-list>
+
+        <app-medico-form
+            class="col-4"
+            [modo]="modoForm"
+            [medico]="medicoSeleccionado"
+            [especialidades]="especialidades">
+
+        </app-medico-form>
+
+        <!--<app-especialidad-list
+            class="col-8"
+            [especialidades]="especialidades"
+            (editarEspecialidadEvent)="editarEspecialidad($event)"
+            (eliminarEspecialidadEvent)="modalConfirmarEliminacion($event)"></app-especialidad-list>-->
+
+        <!--<app-especialidad-form
+            class="col-4"
+            [modo]="modoForm"
+            [especialidad]="especialidadSeleccionada"
+            (cancelar)="modoCrear()"
+            (onGuardarEspecialidad)="guardarEspecialidad($event)"></app-especialidad-form>-->
+    </div>
+</div>

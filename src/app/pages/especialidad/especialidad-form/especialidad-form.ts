@@ -1,7 +1,6 @@
 import {Component, EventEmitter, Input, OnChanges, Output} from '@angular/core';
 import {ReactiveFormsModule, FormControl, FormGroup, Validators} from '@angular/forms';
-import {EspecialidadRequest} from '../../../core/models/especialidad-request';
-import {EspecialidadResponse} from '../../../core/models/especialidad-response';
+import {EspecialidadRequest, EspecialidadResponse} from '../../../core/models/especialidad-model';
 
 @Component({
     selector: 'app-especialidad-form',

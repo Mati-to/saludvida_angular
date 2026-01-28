@@ -1,0 +1,40 @@
+<h4>Médicos</h4>
+
+<div>
+    <div class="row">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Nombre completo</th>
+                <th>Correo</th>
+                <th>RUT</th>
+                <th>Teléfono</th>
+                <th>Especialidad</th>
+            </tr>
+            </thead>
+            <tbody>
+                @for (m of medicos; track m.id) {
+                    <tr>
+                        <td>{{m.nombre}} {{m.apellido}}</td>
+                        <td>{{m.correo}}</td>
+                        <td>{{m.rut}}</td>
+                        <td>{{m.telefono || "No registrado"}}</td>
+                        <td>{{m.nombreEspecialidad}}</td>
+                        <td class="d-flex gap-2 justify-content-end">
+                            <button
+                                class="btn btn-sm btn-outline-secondary"
+                                (click)="solicitarEditar(m)">Editar</button>
+                            <button
+                                class="btn btn-sm btn-outline-danger"
+                                (click)="solicitarEliminar(m)">Eliminar</button>
+                        </td>
+                    </tr>
+                } @empty {
+                    <tr>
+                        <td colspan="6">No hay médicos aun.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
