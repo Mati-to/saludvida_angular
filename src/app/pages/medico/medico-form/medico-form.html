@@ -12,7 +12,7 @@
     </div>
     <div class="mb-3">
         <label for="apellido" class="form-label">Apellido</label>
-        <input type="text" class="form-control form-control-sm" id="apellido" formControlName="apellido">
+        <input type="text" [readOnly]="modo === 'editar'" class="form-control form-control-sm" id="apellido" formControlName="apellido">
     </div>
     <div class="mb-3">
         <label for="correo" class="form-label">Correo</label>

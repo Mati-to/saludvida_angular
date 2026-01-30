@@ -1,7 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {MedicoResponse} from '../models/medico-model';
+import {MedicoCreateRequest, MedicoResponse, MedicoUpdateRequest} from '../models/medico-model';
 
 @Injectable({
   providedIn: 'root',
@@ -12,6 +12,18 @@ export class MedicoService {
 
     getAll(): Observable<MedicoResponse[]> {
         return this.http.get<MedicoResponse[]>(this.apiUrl);
+    }
+
+    create(medico: MedicoCreateRequest): Observable<MedicoResponse> {
+        return this.http.post<MedicoResponse>(this.apiUrl, medico);
+    }
+
+    update(medico: MedicoUpdateRequest, id: number): Observable<MedicoResponse> {
+        return this.http.put<MedicoResponse>(`${this.apiUrl}/${id}`, medico);
+    }
+
+    deleteById(id: number): Observable<Object> {
+        return this.http.delete<Object>(`${this.apiUrl}/${id}`);
     }
 
 }

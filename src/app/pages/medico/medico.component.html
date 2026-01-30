@@ -2,29 +2,28 @@
     <div class="row">
         <app-medico-list
             class="col-8"
-            [medicos]="medicos">
-
+            [medicos]="medicos"
+            (editarMedicoEvent)="editarMedico($event)"
+            (eliminarMedicoEvent)="modalConfirmarEliminar($event)">
         </app-medico-list>
 
         <app-medico-form
             class="col-4"
             [modo]="modoForm"
             [medico]="medicoSeleccionado"
-            [especialidades]="especialidades">
-
-        </app-medico-form>
-
-        <!--<app-especialidad-list
-            class="col-8"
             [especialidades]="especialidades"
-            (editarEspecialidadEvent)="editarEspecialidad($event)"
-            (eliminarEspecialidadEvent)="modalConfirmarEliminacion($event)"></app-especialidad-list>-->
-
-        <!--<app-especialidad-form
-            class="col-4"
-            [modo]="modoForm"
-            [especialidad]="especialidadSeleccionada"
             (cancelar)="modoCrear()"
-            (onGuardarEspecialidad)="guardarEspecialidad($event)"></app-especialidad-form>-->
+            (guardarMedico)="guardarMedico($event)">
+        </app-medico-form>
     </div>
 </div>
+
+<!-- MODAL Eliminar Médico -->
+@if (mostrarModal) {
+    <div class="modal-backdrop fade show" ></div>
+    <app-modal-confirmar-eliminar
+        [entidadSeleccionada]="nombreCompleto"
+        (confirmarEliminar)="confirmarEliminar()"
+        (cancelarEliminar)="cancelarEliminar()">
+    </app-modal-confirmar-eliminar>
+}
