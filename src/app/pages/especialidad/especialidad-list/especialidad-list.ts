@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {EspecialidadResponse} from '../../../core/models/especialidad-response';
+import {EspecialidadResponse} from '../../../core/models/especialidad-model';
 
 @Component({
   selector: 'app-especialidad-list',
