@@ -52,7 +52,7 @@ export class PacienteComponent implements OnInit {
         if (this.modoForm === "editar" && this.pacienteSeleccionado) {
             const id = this.pacienteSeleccionado.id;
             this.pacienteService.update(paciente, id).subscribe({
-                next: (response: PacienteResponse) => {
+                next: (paciente: PacienteResponse) => {
                     console.log("Guardado: ", paciente);
                     // TODO: Mensaje de éxito
                     this.modoForm = "crear";
