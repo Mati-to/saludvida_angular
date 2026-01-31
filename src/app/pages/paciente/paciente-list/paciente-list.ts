@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {PacienteResponse} from '../../../core/models/paciente-model';
 
 @Component({
@@ -9,5 +9,19 @@ import {PacienteResponse} from '../../../core/models/paciente-model';
 })
 export class PacienteList {
     @Input() pacientes: PacienteResponse[] = [];
+
+    @Output()
+    editarPacienteEvent = new EventEmitter<PacienteResponse>();
+
+    @Output()
+    eliminarPacienteEvent = new EventEmitter<PacienteResponse>();
+
+    solicitarEditar(paciente: PacienteResponse) {
+        this.editarPacienteEvent.emit(paciente);
+    }
+
+    solicitarEliminar(paciente: PacienteResponse) {
+        this.eliminarPacienteEvent.emit(paciente);
+    }
 
 }

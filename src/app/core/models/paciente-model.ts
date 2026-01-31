@@ -2,7 +2,7 @@ export interface PacienteRequest {
     nombre: string,
     apellido: string,
     rut: string,
-    telefono: string,
+    telefono: string | null,
     fechaNacimiento: string,
     sexo: Sexo
 }
@@ -12,8 +12,9 @@ export interface PacienteResponse {
     nombre: string,
     apellido: string,
     rut: string,
-    telefono: string,
+    telefono: string | null,
     edad: number,
+    fechaNacimiento: string,
     sexo: Sexo
 }
 

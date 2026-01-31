@@ -22,13 +22,13 @@
                         <td>{{p.telefono || "No registrado"}}</td>
                         <td class="d-flex gap-2 justify-content-end">
                             <button
-                                class="btn btn-sm btn-outline-secondary">
-                                <!--(click)="solicitarEditar(m)">-->
+                                class="btn btn-sm btn-outline-secondary"
+                                (click)="solicitarEditar(p)">
                                 Editar
                             </button>
                             <button
-                                class="btn btn-sm btn-outline-danger">
-                                <!--(click)="solicitarEliminar(m)">-->
+                                class="btn btn-sm btn-outline-danger"
+                                (click)="solicitarEliminar(p)">
                                 Eliminar
                             </button>
                         </td>
