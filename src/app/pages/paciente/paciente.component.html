@@ -1,0 +1,41 @@
+<div class="container-fluid">
+    <div class="row">
+        <app-paciente-list
+            class="col-8"
+            [pacientes]="pacientes">
+
+        </app-paciente-list>
+
+        <app-paciente-form
+            class="col-4">
+
+        </app-paciente-form>
+
+        <!--<app-medico-list
+            class="col-8"
+            [medicos]="medicos"
+            (editarMedicoEvent)="editarMedico($event)"
+            (eliminarMedicoEvent)="modalConfirmarEliminar($event)">
+        </app-medico-list>
+
+        <app-medico-form
+            class="col-4"
+            [modo]="modoForm"
+            [medico]="medicoSeleccionado"
+            [especialidades]="especialidades"
+            (cancelar)="modoCrear()"
+            (guardarMedico)="guardarMedico($event)">
+        </app-medico-form>-->
+    </div>
+</div>
+
+<!-- MODAL Eliminar Médico -->
+<!--
+@if (mostrarModal) {
+    <div class="modal-backdrop fade show" ></div>
+    <app-modal-confirmar-eliminar
+        [entidadSeleccionada]="nombreCompleto"
+        (confirmarEliminar)="confirmarEliminar()"
+        (cancelarEliminar)="cancelarEliminar()">
+    </app-modal-confirmar-eliminar>
+}-->
