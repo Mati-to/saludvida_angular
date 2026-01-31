@@ -1,10 +1,8 @@
 
+<h4> {{ modo === 'crear' ? "Ingresar paciente" : "Editar paciente" }}</h4>
 
 
-<h4> {{ modo === 'crear' ? "Ingresar médico" : "Editar médico" }}</h4>
-
-
-<form [formGroup]="formMedico" (ngSubmit)="enviarMedico()" class="">
+<form [formGroup]="formPaciente" (ngSubmit)="enviarPaciente()">
 
     <div class="mb-3">
         <label for="nombre" class="form-label">Nombre</label>
@@ -15,10 +13,6 @@
         <input type="text" class="form-control form-control-sm" id="apellido" formControlName="apellido">
     </div>
     <div class="mb-3">
-        <label for="correo" class="form-label">Correo</label>
-        <input type="email" class="form-control form-control-sm" id="correo" formControlName="correo">
-    </div>
-    <div class="mb-3">
         <label for="rut" class="form-label">RUT</label>
         <input type="text" class="form-control form-control-sm" id="rut" formControlName="rut">
     </div>
@@ -27,23 +21,26 @@
         <input type="text" class="form-control form-control-sm" id="telefono" formControlName="telefono">
     </div>
     <div class="mb-3">
-        <label for="especialidad" class="form-label">Especialidad médica</label>
-        <select name="especialidad" id="especialidad" class="form-select form-select-sm" formControlName="especialidadId">
-            <option [ngValue]="null" disabled>Selecciona una Especialidad</option>
+        <label for="fNacimiento" class="form-label">Fecha Nacimiento</label>
+        <input type="date" class="form-control form-control-sm" id="fNacimiento" formControlName="fechaNacimiento">
+    </div>
+    <div class="mb-3">
+        <label for="sexo" class="form-label">Sexo</label>
+        <select name="sexo" id="sexo" class="form-select form-select-sm" formControlName="sexo">
+            <option [ngValue]="null" disabled>Selecciona una opción</option>
 
-            @for (e of especialidades; track e.nombre) {
-                <option [ngValue]="e.id">{{e.nombre}}</option>
+            @for (s of listaSexo; track $index) {
+                <option [ngValue]="s">{{s}}</option>
             }
         </select>
     </div>
-
 
     <!--Botones-->
     <div class="d-flex gap-1">
         <button
             type="submit"
             class="btn btn-primary"
-            [disabled]="!formMedico.valid">
+            [disabled]="!formPaciente.valid">
             {{ modo === 'crear' ? "Ingresar" : "Guardar cambios" }}
         </button>
         @if (modo === "editar") {
@@ -55,7 +52,6 @@
             </button>
         }
     </div>
-
 
 </form>
 
