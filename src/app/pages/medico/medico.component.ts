@@ -108,7 +108,6 @@ export class MedicoComponent implements OnInit {
                 error: error => console.error(error)
                 // TODO: Mostrar mensaje de error!
             })
-
     }
 
     get nombreCompleto(): string {
