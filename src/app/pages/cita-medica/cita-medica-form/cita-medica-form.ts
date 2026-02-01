@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {CitaMedicaListResponse, CitaMedicaRequest} from '../../../core/models/cita-medica-model';
-import {MedicoCreateRequest, MedicoResponse} from '../../../core/models/medico-model';
+import {MedicoResponse} from '../../../core/models/medico-model';
 import {PacienteResponse} from '../../../core/models/paciente-model';
 
 @Component({
