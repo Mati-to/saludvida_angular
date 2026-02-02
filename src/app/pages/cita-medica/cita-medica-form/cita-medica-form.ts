@@ -1,6 +1,9 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, Output} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {CitaMedicaListResponse, CitaMedicaRequest} from '../../../core/models/cita-medica-model';
+import {
+    CitaMedicaListResponse,
+    CitaMedicaRequest
+} from '../../../core/models/cita-medica-model';
 import {MedicoResponse} from '../../../core/models/medico-model';
 import {PacienteResponse} from '../../../core/models/paciente-model';
 
@@ -12,7 +15,7 @@ import {PacienteResponse} from '../../../core/models/paciente-model';
   templateUrl: './cita-medica-form.html',
   styleUrl: './cita-medica-form.scss',
 })
-export class CitaMedicaForm {
+export class CitaMedicaForm implements OnChanges {
     @Input() modo!: "crear" | "editar";
     @Input() citaMedica?: CitaMedicaListResponse;
     @Input() pacientes: PacienteResponse[] = [];
@@ -37,6 +40,20 @@ export class CitaMedicaForm {
             {nonNullable: true, validators: [Validators.required]}),
         observaciones: new FormControl<string | null>(""),
     })
+
+    ngOnChanges(): void {
+        if (this.modo === "editar" && this.citaMedica) {
+            this.formCita.patchValue({
+                pacienteId: this.citaMedica.pacienteId,
+                medicoId: this.citaMedica.medicoId,
+                fechaCita: this.citaMedica.fechaCita,
+                horaCita: this.citaMedica.horaCita,
+                observaciones: this.citaMedica.observaciones
+            })
+        } else {
+            this.formCita.reset();
+        }
+    }
 
 
     enviarCita(): void {

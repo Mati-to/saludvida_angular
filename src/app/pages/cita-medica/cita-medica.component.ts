@@ -2,7 +2,11 @@ import {Component, inject, OnInit} from '@angular/core';
 import {CitaMedicaList} from './cita-medica-list/cita-medica-list';
 import {CitaMedicaForm} from './cita-medica-form/cita-medica-form';
 import {CitaMedicaService} from '../../core/services/cita-medica-service';
-import {CitaMedicaListResponse, CitaMedicaRequest} from '../../core/models/cita-medica-model';
+import {
+    CitaMedicaDetallesResponse,
+    CitaMedicaListResponse,
+    CitaMedicaRequest
+} from '../../core/models/cita-medica-model';
 import {CitaMedicaDetalle} from './cita-medica-detalle/cita-medica-detalle';
 import {PacienteResponse} from '../../core/models/paciente-model';
 import {MedicoResponse} from '../../core/models/medico-model';
@@ -23,6 +27,7 @@ import {ModalConfirmarEliminar} from '../../shared/components/modal-confirmar-el
 })
 export class CitaMedicaComponent implements OnInit {
     citaSeleccionada: CitaMedicaListResponse | undefined;
+    citaDetalles: CitaMedicaDetallesResponse | undefined;
     citasMedicas: CitaMedicaListResponse[] = [];
     pacientes: PacienteResponse[] = [];
     medicos: MedicoResponse[] = [];
@@ -42,10 +47,6 @@ export class CitaMedicaComponent implements OnInit {
     }
 
 
-
-
-
-
     // Guardar Cita médica
     guardarCitaMedica(cita: CitaMedicaRequest): void {
         if (this.modoForm == "crear") {
@@ -59,11 +60,40 @@ export class CitaMedicaComponent implements OnInit {
             })
         }
 
+        if (this.modoForm == "editar" && this.citaSeleccionada) {
+            const id: number = this.citaSeleccionada.id;
+            this.citaMedicaService.update(cita, id).subscribe({
+                next: (cita: CitaMedicaListResponse) => {
+                    console.log("Guardada: ", cita);
+                    // TODO: Mensaje de feedback
+                    this.modoForm = "crear";
+                    this.vistaActual = "lista";
+                    this.cargarCitasMedicas();
+                },
+                error: error => console.error(error)
+            })
+        }
+
+    }
+
+    verDetalles(id: number): void {
+        this.citaMedicaService.detailsById(id).subscribe({
+            next: cita => {
+                this.citaDetalles = cita;
+                this.vistaActual = "detalles";
+            },
+            error: err => console.error(err),
+        })
     }
 
     modoCrear(): void {
         this.modoForm = "crear";
         this.citaSeleccionada = undefined;
+    }
+
+    volverLista(): void {
+        this.vistaActual = "lista";
+        this.cargarCitasMedicas();
     }
 
     editarCita(cita: CitaMedicaListResponse): void {

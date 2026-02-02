@@ -1,1 +1,77 @@
-<p>cita-medica-detalle works!</p>
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4> Detalles de la Cita Médica</h4>
+        <button class="btn btn-sm btn-outline-secondary" (click)="volverLista.emit()">
+            <i class="bi bi-arrow-left"></i> Volver
+        </button>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card h-100 border-start border-info border-4 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0 text-info"><i class="bi bi-person"></i> Datos del Paciente</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><strong>Nombre:</strong> {{ nombreCompletoPaciente }}</li>
+                        <li class="list-group-item"><strong>Sexo:</strong> {{ cita?.pacienteDto?.sexo }}</li>
+                        <li class="list-group-item"><strong>RUT:</strong> {{ cita?.pacienteDto?.rut }}</li>
+                        <li class="list-group-item"><strong>Edad:</strong> {{ cita?.pacienteDto?.edad }} años</li>
+                        <li class="list-group-item"><strong>Teléfono:</strong> {{ cita?.pacienteDto?.telefono || 'No registrado' }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card h-100 border-start border-primary border-4 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0 text-primary"><i class="bi bi-person-badge"></i> Datos del Médico</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><strong>Dr(a):</strong> {{ nombreCompletoMedico }} </li>
+                        <li class="list-group-item"><strong>Especialidad:</strong> <span class="badge ms-2 bg-primary">{{ cita?.medicoDto?.especialidad?.nombre }}</span></li>
+                        <li class="list-group-item"><strong>RUT:</strong> {{ cita?.medicoDto?.rut }}</li>
+                        <li class="list-group-item"><strong>Correo:</strong> {{ cita?.medicoDto?.correo }}</li>
+                        <li class="list-group-item"><strong>Teléfono:</strong> {{ cita?.medicoDto?.telefono }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-light">
+                    <h5 class="card-title mb-0"><i class="bi bi-clock-history"></i> Información de la Cita</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-sm-4 text-center border-end">
+                            <p class="text-muted mb-1">Fecha</p>
+                            <h4>{{ cita!.fechaCita | date:'dd/MM/yyyy' }}</h4>
+                        </div>
+                        <div class="col-sm-4 text-center border-end">
+                            <p class="text-muted mb-1">Hora</p>
+                            <h4>{{ cita!.horaCita }}</h4>
+                        </div>
+                        <div class="col-sm-4 text-center">
+                            <p class="text-muted mb-1">Estado</p>
+                            <span class="badge rounded-pill bg-success">Confirmada</span>
+                        </div>
+                    </div>
+                    <hr>
+                    <div>
+                        <h6><strong>Observaciones:</strong></h6>
+                        <p class="bg-light p-3 rounded border">
+                            {{ cita!.observaciones || 'Sin observaciones registradas para esta cita.' }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

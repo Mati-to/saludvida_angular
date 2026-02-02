@@ -22,8 +22,8 @@ export class CitaMedicaService {
         return this.http.post<CitaMedicaDetallesResponse>(this.apiUrl, cita);
     }
 
-    update(cita: CitaMedicaRequest, id: number): Observable<CitaMedicaDetallesResponse> {
-        return this.http.put<CitaMedicaDetallesResponse>(`${this.apiUrl}/${id}`, cita);
+    update(cita: CitaMedicaRequest, id: number): Observable<CitaMedicaListResponse> {
+        return this.http.put<CitaMedicaListResponse>(`${this.apiUrl}/${id}`, cita);
     }
 
     deleteById(id: number): Observable<Object> {

@@ -11,17 +11,20 @@ export interface CitaMedicaRequest {
 
 export interface CitaMedicaListResponse {
     id: number,
+    pacienteId: number,
+    medicoId: number,
     nombrePaciente: string,
     nombreMedico: string,
     especialidad: string,
     fechaCita: string,
     horaCita: string,
+    observaciones: string
 }
 
 export interface CitaMedicaDetallesResponse {
     id: number,
-    pacienteDetalles: PacienteResponse,
-    medicoDetalles: MedicoResponse,
+    pacienteDto: PacienteResponse,
+    medicoDto: MedicoResponse,
     fechaCita: string,
     horaCita: string,
     observaciones: string
