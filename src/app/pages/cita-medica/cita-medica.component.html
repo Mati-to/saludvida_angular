@@ -1,0 +1,40 @@
+<div class="container-fluid">
+    <div class="row">
+
+        @if (vistaActual === "lista") {
+            <app-cita-medica-list
+                class="col-8"
+                [citas]="citasMedicas"
+                (detallesCitaEvent)="verDetalles($event)"
+                (editarCitaEvent)="editarCita($event)"
+                (eliminarCitaEvent)="modalConfirmarEliminar($event)">
+            </app-cita-medica-list>
+        } @else if (vistaActual === "detalles" && citaDetalles) {
+            <app-cita-medica-detalle
+                class="col-8"
+                [cita]="citaDetalles"
+                (volverLista)="volverLista()">
+            </app-cita-medica-detalle>
+        }
+
+        <app-cita-medica-form
+            class="col-4"
+            [modo]="modoForm"
+            [citaMedica]="citaSeleccionada"
+            [pacientes]="pacientes"
+            [medicos]="medicos"
+            (cancelar)="modoCrear()"
+            (guardarCita)="guardarCitaMedica($event)">
+        </app-cita-medica-form>
+    </div>
+</div>
+
+<!-- MODAL Eliminar Cita médica -->
+@if (mostrarModal) {
+    <div class="modal-backdrop fade show" ></div>
+    <app-modal-confirmar-eliminar
+        entidadSeleccionada="Cita Médica"
+        (confirmarEliminar)="confirmarEliminar()"
+        (cancelarEliminar)="cancelarEliminar()">
+    </app-modal-confirmar-eliminar>
+}

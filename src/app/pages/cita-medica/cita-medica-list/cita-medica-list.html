@@ -1,0 +1,43 @@
+<h4>Citas médicas agendadas</h4>
+
+<div>
+    <div class="row">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Nombre Paciente</th>
+                <th>Nombre Médico</th>
+                <th>Especialidad</th>
+                <th>Fecha cita</th>
+                <th>Hora cita</th>
+            </tr>
+            </thead>
+            <tbody>
+                @for (c of citas; track c.id) {
+                    <tr>
+                        <td>{{c.nombrePaciente}}</td>
+                        <td>{{c.nombreMedico}}</td>
+                        <td>{{c.especialidad}}</td>
+                        <td>{{c.fechaCita | date : "dd/MM/yyyy"}}</td>
+                        <td>{{c.horaCita}}</td>
+                        <td class="d-flex gap-2 justify-content-end">
+                            <button
+                                class="btn btn-sm btn-outline-secondary"
+                                (click)="verDetalles(c.id)">Ver Detalles</button>
+                            <button
+                                class="btn btn-sm btn-outline-secondary"
+                                (click)="solicitarEditar(c)">Editar</button>
+                            <button
+                                class="btn btn-sm btn-outline-danger"
+                                (click)="solicitarEliminar(c)">Eliminar</button>
+                        </td>
+                    </tr>
+                } @empty {
+                    <tr>
+                        <td colspan="6">No hay citas agendadas aun.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
