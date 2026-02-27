@@ -1,9 +1,12 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {EspecialidadResponse} from '../../../core/models/especialidad-model';
+import {TitleCasePipe} from '@angular/common';
 
 @Component({
   selector: 'app-especialidad-list',
-  imports: [],
+    imports: [
+        TitleCasePipe
+    ],
   templateUrl: './especialidad-list.html',
   styleUrl: './especialidad-list.scss',
 })

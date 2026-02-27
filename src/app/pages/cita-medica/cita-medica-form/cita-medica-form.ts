@@ -6,6 +6,7 @@ import {
 } from '../../../core/models/cita-medica-model';
 import {MedicoResponse} from '../../../core/models/medico-model';
 import {PacienteResponse} from '../../../core/models/paciente-model';
+import {combineLatestWith} from 'rxjs';
 
 @Component({
   selector: 'app-cita-medica-form',
@@ -42,6 +43,12 @@ export class CitaMedicaForm implements OnChanges {
     })
 
     ngOnChanges(): void {
+
+        combineLatestWith([
+            this.formCita.get("medicoId")!.valueChanges,
+            this.formCita.get("fechaCita")!.valueChanges
+        ])
+
         if (this.modo === "editar" && this.citaMedica) {
             this.formCita.patchValue({
                 pacienteId: this.citaMedica.pacienteId,
@@ -69,5 +76,6 @@ export class CitaMedicaForm implements OnChanges {
         this.guardarCita.emit(request);
         this.formCita.reset();
     }
+
 
 }

@@ -32,11 +32,10 @@
             <option [ngValue]="null" disabled>Selecciona una Especialidad</option>
 
             @for (e of especialidades; track e.nombre) {
-                <option [ngValue]="e.id">{{e.nombre}}</option>
+                <option [ngValue]="e.id">{{e.nombre | titlecase}}</option>
             }
         </select>
     </div>
-
 
     <!--Botones-->
     <div class="d-flex gap-1">
@@ -55,8 +54,6 @@
             </button>
         }
     </div>
-
-
 </form>
 
 

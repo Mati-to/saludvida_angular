@@ -31,6 +31,7 @@ export class CitaMedicaComponent implements OnInit {
     citasMedicas: CitaMedicaListResponse[] = [];
     pacientes: PacienteResponse[] = [];
     medicos: MedicoResponse[] = [];
+    horariosDisponibles: string[] = [];
     mostrarModal: boolean = false;
     vistaActual: "lista" | "detalles" = "lista";
     modoForm: "crear" | "editar" = "crear";
@@ -73,7 +74,6 @@ export class CitaMedicaComponent implements OnInit {
                 error: error => console.error(error)
             })
         }
-
     }
 
     verDetalles(id: number): void {
@@ -143,7 +143,20 @@ export class CitaMedicaComponent implements OnInit {
     cargarMedicos(): void {
         this.medicoService.getAll().subscribe(data => {
             this.medicos = data;
-        })
+        });
+    }
+
+    buscarHorariosDisponibles(medicoId: number, fechaCita: string) {
+        this.citaMedicaService.getHorariosDisponibles(medicoId, fechaCita).subscribe({
+            next: (horarios: string[]) => {
+                this.horariosDisponibles = horarios;
+                if (this.horariosDisponibles.length === 0) {
+                    // TODO: Mostrar alerta de que no hay horarios disponibles
+                    console.log("No hay horarios disponibles")
+                }
+            },
+            error: error => console.error(error)
+        });
     }
 
 }

@@ -1,9 +1,12 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {MedicoResponse} from '../../../core/models/medico-model';
+import {TitleCasePipe} from '@angular/common';
 
 @Component({
   selector: 'app-medico-list',
-  imports: [],
+    imports: [
+        TitleCasePipe
+    ],
   templateUrl: './medico-list.html',
   styleUrl: './medico-list.scss',
 })
