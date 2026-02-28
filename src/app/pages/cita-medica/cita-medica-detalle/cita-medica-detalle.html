@@ -32,7 +32,7 @@
                 <div class="card-body">
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item"><strong>Dr(a):</strong> {{ nombreCompletoMedico }} </li>
-                        <li class="list-group-item"><strong>Especialidad:</strong> <span class="badge ms-2 bg-primary">{{ cita?.medicoDto?.especialidad?.nombre }}</span></li>
+                        <li class="list-group-item"><strong>Especialidad:</strong> <span class="badge ms-2 bg-primary">{{ cita?.medicoDto?.especialidad?.nombre | titlecase}}</span></li>
                         <li class="list-group-item"><strong>RUT:</strong> {{ cita?.medicoDto?.rut }}</li>
                         <li class="list-group-item"><strong>Correo:</strong> {{ cita?.medicoDto?.correo }}</li>
                         <li class="list-group-item"><strong>Teléfono:</strong> {{ cita?.medicoDto?.telefono }}</li>

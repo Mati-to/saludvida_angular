@@ -1,11 +1,12 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {CitaMedicaListResponse} from '../../../core/models/cita-medica-model';
-import {DatePipe} from '@angular/common';
+import {DatePipe, TitleCasePipe} from '@angular/common';
 
 @Component({
   selector: 'app-cita-medica-list',
     imports: [
-        DatePipe
+        DatePipe,
+        TitleCasePipe
     ],
   templateUrl: './cita-medica-list.html',
   styleUrl: './cita-medica-list.scss',

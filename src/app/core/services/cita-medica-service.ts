@@ -14,10 +14,10 @@ export class CitaMedicaService {
         return this.http.get<CitaMedicaListResponse[]>(this.apiUrl);
     }
 
-    getHorariosDisponibles(medicoId: number, fechaCita: string): Observable<string[]> {
+    getHorariosDisponibles(medicoId: number, fecha: string): Observable<string[]> {
         const params = new HttpParams()
             .set("medicoId", medicoId.toString())
-            .set("fechaCita", fechaCita);
+            .set("fecha", fecha);
 
         return this.http.get<string[]>(`${this.apiUrl}/disponibilidad`, {params: params});
     }
