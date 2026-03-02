@@ -31,9 +31,11 @@ export class CitaMedicaComponent implements OnInit {
     citasMedicas: CitaMedicaListResponse[] = [];
     pacientes: PacienteResponse[] = [];
     medicos: MedicoResponse[] = [];
+    horariosDisponibles: string[] = [];
     mostrarModal: boolean = false;
     vistaActual: "lista" | "detalles" = "lista";
     modoForm: "crear" | "editar" = "crear";
+    busquedaHorarios: boolean = false;
 
     // DI
     citaMedicaService: CitaMedicaService = inject(CitaMedicaService);
@@ -51,20 +53,16 @@ export class CitaMedicaComponent implements OnInit {
     guardarCitaMedica(cita: CitaMedicaRequest): void {
         if (this.modoForm == "crear") {
             this.citaMedicaService.create(cita).subscribe({
-                next: cita => {
-                    console.log(cita);
+                next: () => {
                     // TODO: Mostrar mensaje de feedback
                     this.cargarCitasMedicas();
                 },
                 error: err => console.log(err),
             })
-        }
-
-        if (this.modoForm == "editar" && this.citaSeleccionada) {
+        } else if (this.citaSeleccionada) {
             const id: number = this.citaSeleccionada.id;
             this.citaMedicaService.update(cita, id).subscribe({
-                next: (cita: CitaMedicaListResponse) => {
-                    console.log("Guardada: ", cita);
+                next: () => {
                     // TODO: Mensaje de feedback
                     this.modoForm = "crear";
                     this.vistaActual = "lista";
@@ -74,6 +72,8 @@ export class CitaMedicaComponent implements OnInit {
             })
         }
 
+        this.busquedaHorarios = false;
+        this.horariosDisponibles = [];
     }
 
     verDetalles(id: number): void {
@@ -86,9 +86,12 @@ export class CitaMedicaComponent implements OnInit {
         })
     }
 
+    // Cambios de la vista
     modoCrear(): void {
         this.modoForm = "crear";
         this.citaSeleccionada = undefined;
+        this.busquedaHorarios = false;
+        this.horariosDisponibles = [];
     }
 
     volverLista(): void {
@@ -128,6 +131,7 @@ export class CitaMedicaComponent implements OnInit {
             })
     }
 
+    // Carga de datos
     cargarCitasMedicas(): void {
         this.citaMedicaService.getAll().subscribe(data => {
             this.citasMedicas = data;
@@ -143,7 +147,24 @@ export class CitaMedicaComponent implements OnInit {
     cargarMedicos(): void {
         this.medicoService.getAll().subscribe(data => {
             this.medicos = data;
-        })
+        });
+    }
+
+
+    // Búsqueda de horarios disponibles en el Form
+    buscarHorariosDisponibles(medicoId: number, fecha: string): void {
+        this.citaMedicaService.getHorariosDisponibles(medicoId, fecha).subscribe({
+            next: (horarios: string[]) => {
+                this.horariosDisponibles = horarios.map(horario => horario.slice(0, 5));
+                this.busquedaHorarios = true;
+            },
+            error: error => console.error(error)
+        });
+    }
+
+    cancelarBusquedaHorarios(): void {
+        this.busquedaHorarios = false;
+        this.horariosDisponibles = [];
     }
 
 }

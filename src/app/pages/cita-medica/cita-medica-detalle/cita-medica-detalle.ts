@@ -1,11 +1,12 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {CitaMedicaDetallesResponse} from '../../../core/models/cita-medica-model';
-import {DatePipe} from '@angular/common';
+import {DatePipe, TitleCasePipe} from '@angular/common';
 
 @Component({
   selector: 'app-cita-medica-detalle',
     imports: [
-        DatePipe
+        DatePipe,
+        TitleCasePipe
     ],
   templateUrl: './cita-medica-detalle.html',
   styleUrl: './cita-medica-detalle.scss',
@@ -16,10 +17,6 @@ export class CitaMedicaDetalle {
 
     @Output()
     volverLista = new EventEmitter<void>();
-
-    ngOnInit() {
-        console.log(this.cita);
-    }
 
     get nombreCompletoPaciente(): string {
         return `${this.cita?.pacienteDto?.nombre} ${this.cita?.pacienteDto?.apellido}`;

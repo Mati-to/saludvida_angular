@@ -17,7 +17,7 @@
                     <tr>
                         <td>{{c.nombrePaciente}}</td>
                         <td>{{c.nombreMedico}}</td>
-                        <td>{{c.especialidad}}</td>
+                        <td>{{c.especialidad | titlecase}}</td>
                         <td>{{c.fechaCita | date : "dd/MM/yyyy"}}</td>
                         <td>{{c.horaCita}}</td>
                         <td class="d-flex gap-2 justify-content-end">

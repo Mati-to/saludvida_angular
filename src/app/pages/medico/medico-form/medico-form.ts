@@ -2,12 +2,14 @@ import {Component, EventEmitter, Input, OnChanges, Output} from '@angular/core';
 import {MedicoCreateRequest, MedicoResponse} from '../../../core/models/medico-model';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {EspecialidadResponse} from '../../../core/models/especialidad-model';
+import {TitleCasePipe} from '@angular/common';
 
 @Component({
     selector: 'app-medico-form',
     imports: [
         FormsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        TitleCasePipe
     ],
     templateUrl: './medico-form.html',
     styleUrl: './medico-form.scss',

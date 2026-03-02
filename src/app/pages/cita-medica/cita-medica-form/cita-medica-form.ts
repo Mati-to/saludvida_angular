@@ -20,12 +20,22 @@ export class CitaMedicaForm implements OnChanges {
     @Input() citaMedica?: CitaMedicaListResponse;
     @Input() pacientes: PacienteResponse[] = [];
     @Input() medicos: MedicoResponse[] = [];
+    @Input() horariosDisponibles: string[] = [];
+    @Input() busquedaHorariosRealizada: boolean = false;
 
     @Output()
     guardarCita = new EventEmitter<CitaMedicaRequest>();
 
     @Output()
     cancelar = new EventEmitter<void>();
+
+    @Output()
+    cancelarBusquedaHorarios = new EventEmitter<void>();
+
+    @Output()
+    getHorariosDisponibles = new EventEmitter<
+        {medicoId: number, fecha: string}
+    >();
 
 
     // Formulario
@@ -43,6 +53,7 @@ export class CitaMedicaForm implements OnChanges {
 
     ngOnChanges(): void {
         if (this.modo === "editar" && this.citaMedica) {
+            this.formCita.reset();
             this.formCita.patchValue({
                 pacienteId: this.citaMedica.pacienteId,
                 medicoId: this.citaMedica.medicoId,
@@ -50,11 +61,8 @@ export class CitaMedicaForm implements OnChanges {
                 horaCita: this.citaMedica.horaCita,
                 observaciones: this.citaMedica.observaciones
             })
-        } else {
-            this.formCita.reset();
         }
     }
-
 
     enviarCita(): void {
         if (this.formCita.invalid) return;
@@ -70,4 +78,17 @@ export class CitaMedicaForm implements OnChanges {
         this.formCita.reset();
     }
 
+    solicitarHorarios(): void {
+        const medicoId = this.formCita.get("medicoId")?.value;
+        const fecha = this.formCita.get("fechaCita")?.value;
+
+        if (medicoId && fecha) {
+            this.getHorariosDisponibles.emit({medicoId, fecha});
+        }
+    }
+
+    cancelarEdit(): void {
+        this.formCita.reset();
+        this.cancelar.emit();
+    }
 }

@@ -1,5 +1,5 @@
 import {inject, Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {CitaMedicaDetallesResponse, CitaMedicaListResponse, CitaMedicaRequest} from '../models/cita-medica-model';
 import {Observable} from 'rxjs';
 
@@ -12,6 +12,14 @@ export class CitaMedicaService {
 
     getAll(): Observable<CitaMedicaListResponse[]> {
         return this.http.get<CitaMedicaListResponse[]>(this.apiUrl);
+    }
+
+    getHorariosDisponibles(medicoId: number, fecha: string): Observable<string[]> {
+        const params = new HttpParams()
+            .set("medicoId", medicoId.toString())
+            .set("fecha", fecha);
+
+        return this.http.get<string[]>(`${this.apiUrl}/disponibilidad`, {params: params});
     }
 
     detailsById(id: number): Observable<CitaMedicaDetallesResponse> {

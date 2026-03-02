@@ -1,8 +1,11 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {TitleCasePipe} from '@angular/common';
 
 @Component({
   selector: 'app-modal-confirmar-eliminar',
-  imports: [],
+    imports: [
+        TitleCasePipe
+    ],
   templateUrl: './modal-confirmar-eliminar.html',
   styleUrl: './modal-confirmar-eliminar.scss',
 })

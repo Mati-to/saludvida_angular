@@ -24,6 +24,10 @@
             [pacientes]="pacientes"
             [medicos]="medicos"
             (cancelar)="modoCrear()"
+            (cancelarBusquedaHorarios)="cancelarBusquedaHorarios()"
+            [horariosDisponibles]="horariosDisponibles"
+            [busquedaHorariosRealizada]="busquedaHorarios"
+            (getHorariosDisponibles)="buscarHorariosDisponibles($event.medicoId, $event.fecha)"
             (guardarCita)="guardarCitaMedica($event)">
         </app-cita-medica-form>
     </div>
