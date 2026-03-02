@@ -10,6 +10,7 @@
         <app-medico-form
             class="col-4"
             [modo]="modoForm"
+            [erroresFormBackend]="erroresForm"
             [medico]="medicoSeleccionado"
             [especialidades]="especialidades"
             (cancelar)="modoCrear()"
@@ -17,13 +18,3 @@
         </app-medico-form>
     </div>
 </div>
-
-<!-- MODAL Eliminar Médico -->
-@if (mostrarModal) {
-    <div class="modal-backdrop fade show" ></div>
-    <app-modal-confirmar-eliminar
-        [entidadSeleccionada]="nombreCompleto"
-        (confirmarEliminar)="confirmarEliminar()"
-        (cancelarEliminar)="cancelarEliminar()">
-    </app-modal-confirmar-eliminar>
-}

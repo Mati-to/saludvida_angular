@@ -1,18 +1,19 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, OnInit, ViewChild} from '@angular/core';
 import {MedicoList} from './medico-list/medico-list';
 import {MedicoCreateRequest, MedicoResponse, MedicoUpdateRequest} from '../../core/models/medico-model';
 import {MedicoService} from '../../core/services/medico-service';
 import {MedicoForm} from './medico-form/medico-form';
 import {EspecialidadService} from '../../core/services/especialidad-service';
 import {EspecialidadResponse} from '../../core/models/especialidad-model';
-import {ModalConfirmarEliminar} from '../../shared/components/modal-confirmar-eliminar/modal-confirmar-eliminar';
+import {HttpErrorResponse} from '@angular/common/http';
+import {ApiErrorModel} from '../../core/models/api-error-model';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-medico',
     imports: [
         MedicoList,
         MedicoForm,
-        ModalConfirmarEliminar
     ],
   templateUrl: './medico.component.html',
   styleUrl: './medico.component.scss',
@@ -21,8 +22,10 @@ export class MedicoComponent implements OnInit {
     medicoSeleccionado: MedicoResponse | undefined;
     medicos: MedicoResponse[] = [];
     especialidades: EspecialidadResponse[] = [];
-    mostrarModal: boolean = false;
+    erroresForm?: Record<string, string[]>;
     modoForm: "crear" | "editar" = "crear";
+
+    @ViewChild(MedicoForm) hijoForm!: MedicoForm;
 
     // DI
     medicoService: MedicoService = inject(MedicoService);
@@ -34,13 +37,13 @@ export class MedicoComponent implements OnInit {
     }
 
     cargarListaMedicos(): void {
-        this.medicoService.getAll().subscribe(medicos => {
+        this.medicoService.getAll().subscribe((medicos: MedicoResponse[]): void => {
             this.medicos = medicos;
         })
     }
 
     cargarEspecialidadesForm(): void {
-        this.especialidadService.getAll().subscribe(especialidades => {
+        this.especialidadService.getAll().subscribe((especialidades: EspecialidadResponse[]): void => {
             this.especialidades = especialidades;
         })
     }
@@ -50,11 +53,22 @@ export class MedicoComponent implements OnInit {
         if (this.modoForm === "crear") {
             this.medicoService.create(medico as MedicoCreateRequest).subscribe({
                 next: (medico: MedicoResponse) => {
-                    console.log("Guardado: ", medico);
-                    // TODO: SweetAlert - Mostrar un mensaje de feedback
+                    void Swal.fire({
+                        title: "Médico guardado!",
+                        text: `${medico.nombre} ${medico.apellido} guardado con éxito.`,
+                        icon: "success",
+                        timer: 2000
+                    });
+                    this.hijoForm.limpiarForm();
                     this.cargarListaMedicos();
                 },
-                error: error => console.error(error)
+                error: (error: HttpErrorResponse) => {
+                    const apiError = error.error as ApiErrorModel;
+
+                    if (apiError.errores) {
+                        this.erroresForm = apiError.errores;
+                    }
+                }
             })
         }
 
@@ -62,15 +76,20 @@ export class MedicoComponent implements OnInit {
             const id = this.medicoSeleccionado.id;
             this.medicoService.update(medico as MedicoUpdateRequest, id).subscribe({
                 next: (medico: MedicoResponse) => {
-                    console.log("Guardado: ", medico);
-                    // TODO: Mensaje de éxito
+                    void Swal.fire({
+                        title: "Cambios guardados!",
+                        text: `Cambios en ${medico.nombre} ${medico.apellido} guardados con éxito.`,
+                        icon: "success",
+                        timer: 2000,
+                    });
                     this.modoForm = "crear";
                     this.cargarListaMedicos();
                 },
-                error: error => console.error(error)
+                error: (error: HttpErrorResponse) => {
+                    this.enviarErroresValidacion(error);
+                }
             })
         }
-
     }
 
     modoCrear(): void {
@@ -85,35 +104,46 @@ export class MedicoComponent implements OnInit {
 
     // Eliminar médico
     modalConfirmarEliminar(medico: MedicoResponse): void {
-        this.medicoSeleccionado = medico;
-        this.mostrarModal = true;
+        Swal.fire({
+            title: "Confirmar eliminación",
+            text: `¿Eliminar al médico ${medico.nombre} ${medico.apellido}?`,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Confirmar",
+            cancelButtonText: "Cancelar",
+        }).then(response => {
+            if (response.isConfirmed) {
+                this.medicoService
+                    .deleteById(medico.id)
+                    .subscribe({
+                        next: () => {
+                            void Swal.fire({
+                                title: "Eliminado!",
+                                text: "Médico eliminado con éxito.",
+                                icon: "success"
+                            });
+                            this.cargarListaMedicos();
+                        },
+                        error: (error: HttpErrorResponse) => {
+                            const apiError = error.error as ApiErrorModel;
+
+                            void Swal.fire({
+                                title: "Error!",
+                                text: apiError.mensaje,
+                                icon: "error",
+                            })
+                        }
+                    })
+            }
+        })
     }
 
-    cancelarEliminar(): void {
-        this.mostrarModal = false;
-        this.medicoSeleccionado = undefined;
+    // Errores
+    enviarErroresValidacion(error: HttpErrorResponse): void {
+        const apiError = error.error as ApiErrorModel;
+
+        if (apiError.errores) {
+            this.erroresForm= apiError.errores;
+        }
     }
-
-    confirmarEliminar(): void {
-        if (!this.medicoSeleccionado) return;
-
-        this.medicoService
-            .deleteById(this.medicoSeleccionado.id)
-            .subscribe({
-                next: () => {
-                    this.mostrarModal = false;
-                    // TODO: SweetAlert - Mostrar mensaje de éxito
-                    this.cargarListaMedicos();
-                },
-                error: error => console.error(error)
-                // TODO: Mostrar mensaje de error!
-            })
-    }
-
-    get nombreCompleto(): string {
-        return this.medicoSeleccionado
-            ? `${this.medicoSeleccionado.nombre} ${this.medicoSeleccionado.apellido}`
-            : "";
-    }
-
 }

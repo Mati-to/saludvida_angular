@@ -1,4 +1,5 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZoneChangeDetection } from '@angular/core';
+import { provideSweetAlert2 } from '@sweetalert2/ngx-sweetalert2';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -15,5 +16,9 @@ export const appConfig: ApplicationConfig = {
               headerName: "X-XSRF-TOKEN",
           })
       ),
+      provideSweetAlert2({
+          fireOnInit: false,
+          dismissOnDestroy: true,
+      })
   ]
 };

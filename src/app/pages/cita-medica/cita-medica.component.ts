@@ -57,7 +57,7 @@ export class CitaMedicaComponent implements OnInit {
                     // TODO: Mostrar mensaje de feedback
                     this.cargarCitasMedicas();
                 },
-                error: err => console.log(err),
+                error: err => console.log(err.error),
             })
         } else if (this.citaSeleccionada) {
             const id: number = this.citaSeleccionada.id;

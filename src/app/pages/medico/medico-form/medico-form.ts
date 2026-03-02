@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {MedicoCreateRequest, MedicoResponse} from '../../../core/models/medico-model';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {EspecialidadResponse} from '../../../core/models/especialidad-model';
@@ -18,6 +18,7 @@ export class MedicoForm implements OnChanges {
     @Input() modo!: "crear" | "editar";
     @Input() medico?: MedicoResponse;
     @Input() especialidades: EspecialidadResponse[] = [];
+    @Input() erroresFormBackend?: Record<string, string[]>;
 
     @Output()
     guardarMedico = new EventEmitter<MedicoCreateRequest>();
@@ -41,30 +42,42 @@ export class MedicoForm implements OnChanges {
             {validators: [Validators.required]}),
     })
 
-    ngOnChanges(): void {
-        if (this.modo === "editar" && this.medico) {
-            this.formMedico.patchValue({
-                nombre: this.medico.nombre,
-                apellido: this.medico.apellido,
-                correo: this.medico.correo,
-                rut: this.medico.rut,
-                telefono: this.medico.telefono,
-                especialidadId: this.medico.especialidad.id
-            });
+    ngOnChanges(changes:SimpleChanges): void {
+        if (changes['modo'] || changes['medico']) {
+            if (this.modo === "editar" && this.medico) {
+                this.formMedico.patchValue({
+                    nombre: this.medico.nombre,
+                    apellido: this.medico.apellido,
+                    correo: this.medico.correo,
+                    rut: this.medico.rut,
+                    telefono: this.medico.telefono,
+                    especialidadId: this.medico.especialidad.id
+                });
 
-            // Bloqueo de campos para no editar
-            this.formMedico.get('rut')?.disable();
-            this.formMedico.get('correo')?.disable();
+                // Bloqueo de campos para no editar
+                this.formMedico.get('rut')?.disable();
+                this.formMedico.get('correo')?.disable();
 
-        } else {
-            this.formMedico.reset();
+            } else if (this.modo === "crear") {
+                this.formMedico.reset();
 
-            // Rehabilita los campos deshabilitados al pasar a modo Crear
-            this.formMedico.get('rut')?.enable();
-            this.formMedico.get('correo')?.enable();
+                // Rehabilita los campos deshabilitados al pasar a modo Crear
+                this.formMedico.get('rut')?.enable();
+                this.formMedico.get('correo')?.enable();
+            }
+        }
+
+        if (changes['erroresFormBackend'] && this.erroresFormBackend) {
+            Object.keys(this.erroresFormBackend).forEach((campo: string) => {
+                const control = this.formMedico.get(campo);
+                if (control) {
+                    control.setErrors({
+                        backendError: this.erroresFormBackend![campo][0]
+                    });
+                }
+            })
         }
     }
-
 
     enviarMedico(): void {
         if (this.formMedico.invalid) return;
@@ -74,8 +87,10 @@ export class MedicoForm implements OnChanges {
             ...formValues,
             especialidadId: formValues.especialidadId!
         }
-
         this.guardarMedico.emit(request);
+    }
+
+    limpiarForm(): void {
         this.formMedico.reset();
     }
 }

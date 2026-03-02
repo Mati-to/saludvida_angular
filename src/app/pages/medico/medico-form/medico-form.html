@@ -7,27 +7,63 @@
 <form [formGroup]="formMedico" (ngSubmit)="enviarMedico()" class="">
 
     <div class="mb-3">
-        <label for="nombre" class="form-label">Nombre</label>
+        <label for="nombre" class="form-label m-0">Nombre</label>
         <input type="text" class="form-control form-control-sm" id="nombre" formControlName="nombre">
+
+        @if (formMedico.get('nombre')?.errors?.['backendError']) {
+            <span class="text-danger" role="alert">
+                <strong>{{ formMedico.get('nombre')?.errors?.['backendError'] }}</strong>
+            </span>
+        }
     </div>
+
     <div class="mb-3">
-        <label for="apellido" class="form-label">Apellido</label>
+        <label for="apellido" class="form-label m-0">Apellido</label>
         <input type="text" class="form-control form-control-sm" id="apellido" formControlName="apellido">
+
+        @if (formMedico.get('apellido')?.errors?.['backendError']) {
+            <span class="text-danger" role="alert">
+                <strong>{{ formMedico.get('apellido')?.errors?.['backendError'] }}</strong>
+            </span>
+        }
     </div>
+
     <div class="mb-3">
-        <label for="correo" class="form-label">Correo</label>
+        <label for="correo" class="form-label m-0">Correo</label>
         <input type="email" class="form-control form-control-sm" id="correo" formControlName="correo">
+
+        @if (formMedico.get('correo')?.errors?.['backendError']) {
+            <span class="text-danger" role="alert">
+                <strong>{{ formMedico.get('correo')?.errors?.['backendError'] }}</strong>
+            </span>
+        }
     </div>
+
     <div class="mb-3">
-        <label for="rut" class="form-label">RUT</label>
+        <label for="rut" class="form-label m-0">RUT</label>
         <input type="text" class="form-control form-control-sm" id="rut" formControlName="rut">
+
+        @if (formMedico.get('rut')?.errors?.['backendError']) {
+            <span class="text-danger" role="alert">
+                <strong>{{ formMedico.get('rut')?.errors?.['backendError'] }}</strong>
+            </span>
+        }
     </div>
+
+
     <div class="mb-3">
-        <label for="telefono" class="form-label">Teléfono</label>
+        <label for="telefono" class="form-label m-0">Teléfono</label>
         <input type="text" class="form-control form-control-sm" id="telefono" formControlName="telefono">
+
+        @if (formMedico.get('telefono')?.errors?.['backendError']) {
+            <span class="text-danger" role="alert">
+                <strong>{{ formMedico.get('telefono')?.errors?.['backendError'] }}</strong>
+            </span>
+        }
     </div>
+
     <div class="mb-3">
-        <label for="especialidad" class="form-label">Especialidad médica</label>
+        <label for="especialidad" class="form-label m-0">Especialidad médica</label>
         <select name="especialidad" id="especialidad" class="form-select form-select-sm" formControlName="especialidadId">
             <option [ngValue]="null" disabled>Selecciona una Especialidad</option>
 
@@ -35,6 +71,12 @@
                 <option [ngValue]="e.id">{{e.nombre | titlecase}}</option>
             }
         </select>
+
+        @if (formMedico.get('especialidad')?.errors?.['backendError']) {
+            <span class="text-danger" role="alert">
+                <strong>{{ formMedico.get('especialidad')?.errors?.['backendError'] }}</strong>
+            </span>
+        }
     </div>
 
     <!--Botones-->
