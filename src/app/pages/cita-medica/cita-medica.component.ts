@@ -86,7 +86,7 @@ export class CitaMedicaComponent implements OnInit {
         })
     }
 
-    // Modos de vista
+    // Cambios de la vista
     modoCrear(): void {
         this.modoForm = "crear";
         this.citaSeleccionada = undefined;

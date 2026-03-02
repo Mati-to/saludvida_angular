@@ -32,16 +32,22 @@
         </div>
     }
 
-    @if (horariosDisponibles.length > 0 && busquedaHorariosRealizada) {
-        <div class="mb-3">
-            <label for="horaCita" class="form-label">Hora Cita</label>
-            <select class="form-select form-select-sm" id="horaCita" formControlName="horaCita">
-                <option value="" disabled selected>Seleccione una hora</option>
-                @for (hora of horariosDisponibles; track hora) {
-                    <option [value]="hora">{{ hora }}</option>
-                }
-            </select>
-        </div>
+    @if (busquedaHorariosRealizada) {
+        @if (horariosDisponibles.length > 0) {
+            <div class="mb-3">
+                <label for="horaCita" class="form-label">Hora Cita</label>
+                <select class="form-select form-select-sm" id="horaCita" formControlName="horaCita">
+                    <option value="" disabled selected>Seleccione una hora</option>
+                    @for (hora of horariosDisponibles; track hora) {
+                        <option [value]="hora">{{ hora }}</option>
+                    }
+                </select>
+            </div>
+        } @else {
+            <div class="mb-3">
+                <p>No hay horarios disponibles para esta fecha.</p>
+            </div>
+        }
 
         <button type="button"
                 class="btn btn-secondary btn-sm mb-3"
