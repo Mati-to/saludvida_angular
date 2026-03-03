@@ -52,7 +52,7 @@ export class MedicoComponent implements OnInit {
     guardarMedico(medico: MedicoCreateRequest | MedicoUpdateRequest) {
         if (this.modoForm === "crear") {
             this.medicoService.create(medico as MedicoCreateRequest).subscribe({
-                next: (medico: MedicoResponse) => {
+                next: (medico: MedicoResponse): void => {
                     void Swal.fire({
                         title: "Médico guardado!",
                         text: `${medico.nombre} ${medico.apellido} guardado con éxito.`,
@@ -62,12 +62,8 @@ export class MedicoComponent implements OnInit {
                     this.hijoForm.limpiarForm();
                     this.cargarListaMedicos();
                 },
-                error: (error: HttpErrorResponse) => {
-                    const apiError = error.error as ApiErrorModel;
-
-                    if (apiError.errores) {
-                        this.erroresForm = apiError.errores;
-                    }
+                error: (error: HttpErrorResponse): void => {
+                    this.enviarErroresValidacion(error);
                 }
             })
         }
@@ -92,6 +88,7 @@ export class MedicoComponent implements OnInit {
         }
     }
 
+    // Vistas del Form
     modoCrear(): void {
         this.modoForm = "crear";
         this.medicoSeleccionado = undefined;
@@ -123,15 +120,6 @@ export class MedicoComponent implements OnInit {
                                 icon: "success"
                             });
                             this.cargarListaMedicos();
-                        },
-                        error: (error: HttpErrorResponse) => {
-                            const apiError = error.error as ApiErrorModel;
-
-                            void Swal.fire({
-                                title: "Error!",
-                                text: apiError.mensaje,
-                                icon: "error",
-                            })
                         }
                     })
             }
