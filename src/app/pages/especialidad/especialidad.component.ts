@@ -4,6 +4,8 @@ import {EspecialidadService} from '../../core/services/especialidad-service';
 import {EspecialidadList} from './especialidad-list/especialidad-list';
 import {EspecialidadForm} from './especialidad-form/especialidad-form';
 import {ModalConfirmarEliminar} from '../../shared/components/modal-confirmar-eliminar/modal-confirmar-eliminar';
+import {HttpErrorResponse} from '@angular/common/http';
+import {ApiErrorModel} from '../../core/models/api-error-model';
 
 @Component({
   selector: 'app-especialidad',
@@ -44,7 +46,11 @@ export class EspecialidadComponent implements OnInit {
                         // TODO: Mostrar un mensaje o un SweetAlert
                         this.cargarListaEspecialidades();
                     },
-                    error: (err) => console.error(err)
+                    error: (err: HttpErrorResponse) => {
+                        const apiError = err.error as ApiErrorModel;
+
+                        console.error(apiError.errores);
+                    },
                 })
         }
 
