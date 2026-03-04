@@ -17,7 +17,7 @@ export const globalErrorsInterceptor: HttpInterceptorFn = (
 
             if (err.status === 0) {
                 mensaje = "No se pudo conectar con el servidor.";
-            } else if (err.error?.errores) {
+            } else if (!err.error?.errores) {
                 mensaje = err.error.mensaje;
             }
 
