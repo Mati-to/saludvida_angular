@@ -4,28 +4,18 @@
         <app-especialidad-list
             class="col-8"
             [especialidades]="especialidades"
-            (editarEspecialidadEvent)="editarEspecialidad($event)"
+            (editarEspecialidadEvent)="modoEditar($event)"
             (eliminarEspecialidadEvent)="modalConfirmarEliminacion($event)"></app-especialidad-list>
 
         <app-especialidad-form
             class="col-4"
             [modo]="modoForm"
+            [erroresFormBackend]="erroresForm"
             [especialidad]="especialidadSeleccionada"
             (cancelar)="modoCrear()"
             (onGuardarEspecialidad)="guardarEspecialidad($event)"></app-especialidad-form>
     </div>
 </div>
-
-
-<!-- MODAL Eliminar Especialidad -->
-@if (mostrarModal) {
-    <div class="modal-backdrop fade show" ></div>
-    <app-modal-confirmar-eliminar
-        [entidadSeleccionada]="especialidadSeleccionada?.nombre"
-        (confirmarEliminar)="confirmarEliminacion()"
-        (cancelarEliminar)="cancelarEliminacion()">
-    </app-modal-confirmar-eliminar>
-}
 
 
 

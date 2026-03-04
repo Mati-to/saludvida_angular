@@ -59,8 +59,6 @@ export class MedicoForm implements OnChanges {
                 this.formMedico.get('correo')?.disable();
 
             } else if (this.modo === "crear") {
-                this.formMedico.reset();
-
                 // Rehabilita los campos deshabilitados al pasar a modo Crear
                 this.formMedico.get('rut')?.enable();
                 this.formMedico.get('correo')?.enable();

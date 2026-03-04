@@ -1,18 +1,17 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, OnInit, ViewChild} from '@angular/core';
 import {EspecialidadResponse, EspecialidadRequest} from '../../core/models/especialidad-model';
 import {EspecialidadService} from '../../core/services/especialidad-service';
 import {EspecialidadList} from './especialidad-list/especialidad-list';
 import {EspecialidadForm} from './especialidad-form/especialidad-form';
-import {ModalConfirmarEliminar} from '../../shared/components/modal-confirmar-eliminar/modal-confirmar-eliminar';
 import {HttpErrorResponse} from '@angular/common/http';
 import {ApiErrorModel} from '../../core/models/api-error-model';
+import Swal, {SweetAlertResult} from 'sweetalert2';
 
 @Component({
   selector: 'app-especialidad',
     imports: [
         EspecialidadList,
         EspecialidadForm,
-        ModalConfirmarEliminar
     ],
   templateUrl: './especialidad.component.html',
   styleUrl: './especialidad.component.scss',
@@ -20,8 +19,10 @@ import {ApiErrorModel} from '../../core/models/api-error-model';
 export class EspecialidadComponent implements OnInit {
     especialidadSeleccionada: EspecialidadResponse | undefined;
     especialidades: EspecialidadResponse[] = [];
-    mostrarModal: boolean = false;
+    erroresForm?: Record<string, string[]>;
     modoForm: "crear" | "editar" = "crear";
+
+    @ViewChild(EspecialidadForm) hijoForm!: EspecialidadForm;
 
     // DI
     especialidadService: EspecialidadService = inject(EspecialidadService);
@@ -31,25 +32,29 @@ export class EspecialidadComponent implements OnInit {
     }
 
     cargarListaEspecialidades(): void {
-        this.especialidadService.getAll().subscribe(especialidades => {
-            this.especialidades = especialidades;
-        })
+        this.especialidadService.getAll().subscribe(
+            (especialidades: EspecialidadResponse[]): void => {
+                this.especialidades = especialidades;
+        });
     }
 
-    // Crear Especialidad
-    guardarEspecialidad(especialidad: EspecialidadRequest) {
+    // Crear y editar Especialidad
+    guardarEspecialidad(especialidad: EspecialidadRequest): void {
         if (this.modoForm === "crear") {
             this.especialidadService.create(especialidad)
                 .subscribe({
-                    next: (res) => {
-                        console.log("Guardado: ", res);
-                        // TODO: Mostrar un mensaje o un SweetAlert
+                    next: (esp: EspecialidadResponse): void => {
+                        void Swal.fire({
+                            title: 'Especialidad guardada!',
+                            text: `"${this.capitalizeNombre(esp.nombre)}" guardada con éxito.`,
+                            icon: 'success',
+                            timer: 2000,
+                        });
+                        this.hijoForm.limpiarForm();
                         this.cargarListaEspecialidades();
                     },
-                    error: (err: HttpErrorResponse) => {
-                        const apiError = err.error as ApiErrorModel;
-
-                        console.error(apiError.errores);
+                    error: (err: HttpErrorResponse): void => {
+                        this.enviarErroresValidacion(err);
                     },
                 })
         }
@@ -58,48 +63,72 @@ export class EspecialidadComponent implements OnInit {
         if (this.modoForm === "editar" && this.especialidadSeleccionada) {
             this.especialidadService.update(especialidad, this.especialidadSeleccionada.id)
                 .subscribe({
-                    next: (res) => {
-                        console.log("Cambios guardados: ", res);
-                        // TODO: Mostrar mensaje con un SweetAlert
-                        this.modoForm = "crear";
+                    next: (esp: EspecialidadResponse): void => {
+                        void Swal.fire({
+                            title: "Cambios guardados!",
+                            text: `Cambios en ${esp.nombre} guardados con éxito.`,
+                            icon: 'success',
+                            timer: 2000,
+                        });
+                        this.hijoForm.limpiarForm();
+                        this.modoCrear();
                         this.cargarListaEspecialidades();
                     },
-                    error: (err) => console.error(err)
+                    error: (err: HttpErrorResponse): void => {
+                        this.enviarErroresValidacion(err);
+                    }
                 })
         }
     }
 
+    // Modos de vista del Form
     modoCrear(): void {
         this.modoForm = "crear";
         this.especialidadSeleccionada = undefined;
     }
 
-    editarEspecialidad(especialidad: EspecialidadResponse): void {
+    modoEditar(especialidad: EspecialidadResponse): void {
         this.modoForm = "editar";
         this.especialidadSeleccionada = especialidad;
     }
 
-
     // Eliminar Especialidad
-    modalConfirmarEliminacion(especialidad: EspecialidadResponse) {
-        this.especialidadSeleccionada = especialidad;
-        this.mostrarModal = true;
+    modalConfirmarEliminacion(esp: EspecialidadResponse): void {
+        Swal.fire({
+            title: "Confirmar eliminación",
+            text: `¿Eliminar la especialidad ${this.capitalizeNombre(esp.nombre)}?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: "Confirmar",
+            cancelButtonText: "Cancelar"
+        }).then((response: SweetAlertResult): void => {
+            if (response.isConfirmed) {
+                this.especialidadService
+                    .deleteById(esp.id)
+                    .subscribe({
+                        next: () => {
+                            void Swal.fire({
+                                title: "Eliminado!",
+                                text: `Especialidad "${this.capitalizeNombre(esp.nombre)}" eliminada con éxito.`,
+                                icon: "success",
+                            });
+                            this.cargarListaEspecialidades();
+                        }
+                    });
+            }
+        })
     }
 
-    cancelarEliminacion(): void {
-        this.mostrarModal = false;
-        this.especialidadSeleccionada = undefined;
+    // Errores del Form
+    enviarErroresValidacion(error: HttpErrorResponse): void {
+        const apiError = error.error as ApiErrorModel;
+
+        if (apiError.errores) {
+            this.erroresForm= apiError.errores;
+        }
     }
 
-    confirmarEliminacion(): void {
-        if (!this.especialidadSeleccionada) return;
-
-        this.especialidadService
-            .deleteById(this.especialidadSeleccionada.id)
-            .subscribe(() => {
-                this.mostrarModal = false;
-                this.cargarListaEspecialidades();
-            })
+    capitalizeNombre(nombre:string): string {
+        return nombre.charAt(0).toUpperCase() + nombre.substring(1);
     }
-
 }

@@ -7,6 +7,12 @@
     <div class="mb-3">
         <label for="nombre" class="form-label">Nombre</label>
         <input type="text" class="form-control" id="nombre" formControlName="nombre">
+
+        @if (formEspecialidad.get("nombre")?.errors?.["backendError"]) {
+            <span class="text-danger" role="alert">
+                <strong>{{ formEspecialidad.get('nombre')?.errors?.['backendError'] }}</strong>
+            </span>
+        }
     </div>
 
     <div class="d-flex gap-1">
@@ -25,7 +31,5 @@
             </button>
         }
     </div>
-
-
 </form>
 

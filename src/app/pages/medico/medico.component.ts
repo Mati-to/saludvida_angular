@@ -78,6 +78,7 @@ export class MedicoComponent implements OnInit {
                         icon: "success",
                         timer: 2000,
                     });
+                    this.hijoForm.limpiarForm();
                     this.modoForm = "crear";
                     this.cargarListaMedicos();
                 },
