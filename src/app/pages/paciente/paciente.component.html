@@ -3,13 +3,14 @@
         <app-paciente-list
             class="col-8"
             [pacientes]="pacientes"
-            (editarPacienteEvent)="editarPaciente($event)"
+            (editarPacienteEvent)="modoEditar($event)"
             (eliminarPacienteEvent)="modalConfirmarEliminar($event)">
         </app-paciente-list>
 
         <app-paciente-form
             class="col-4"
             [modo]="modoForm"
+            [erroresFormBackend]="erroresForm"
             [paciente]="pacienteSeleccionado"
             (cancelar)="modoCrear()"
             (guardarPaciente)="guardarPaciente($event)">
@@ -17,12 +18,3 @@
     </div>
 </div>
 
-<!-- MODAL Eliminar Médico -->
-@if (mostrarModal) {
-    <div class="modal-backdrop fade show" ></div>
-    <app-modal-confirmar-eliminar
-        [entidadSeleccionada]="nombreCompleto"
-        (confirmarEliminar)="confirmarEliminar()"
-        (cancelarEliminar)="cancelarEliminar()">
-    </app-modal-confirmar-eliminar>
-}

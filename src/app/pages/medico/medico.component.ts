@@ -92,6 +92,7 @@ export class MedicoComponent implements OnInit {
     // Vistas del Form
     modoCrear(): void {
         this.modoForm = "crear";
+        this.hijoForm.limpiarForm();
         this.medicoSeleccionado = undefined;
     }
 

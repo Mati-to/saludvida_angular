@@ -7,22 +7,52 @@
     <div class="mb-3">
         <label for="nombre" class="form-label">Nombre</label>
         <input type="text" class="form-control form-control-sm" id="nombre" formControlName="nombre">
+
+        @if (formPaciente.get('nombre')?.errors?.['backendError']) {
+            <span class="text-danger" role="alert">
+                <strong>{{ formPaciente.get('nombre')?.errors?.['backendError'] }}</strong>
+            </span>
+        }
     </div>
     <div class="mb-3">
         <label for="apellido" class="form-label">Apellido</label>
         <input type="text" class="form-control form-control-sm" id="apellido" formControlName="apellido">
+
+        @if (formPaciente.get('apellido')?.errors?.['backendError']) {
+            <span class="text-danger" role="alert">
+                <strong>{{ formPaciente.get('apellido')?.errors?.['backendError'] }}</strong>
+            </span>
+        }
     </div>
     <div class="mb-3">
         <label for="rut" class="form-label">RUT</label>
         <input type="text" class="form-control form-control-sm" id="rut" formControlName="rut">
+
+        @if (formPaciente.get('rut')?.errors?.['backendError']) {
+            <span class="text-danger" role="alert">
+                <strong>{{ formPaciente.get('rut')?.errors?.['backendError'] }}</strong>
+            </span>
+        }
     </div>
     <div class="mb-3">
         <label for="telefono" class="form-label">Teléfono</label>
         <input type="text" class="form-control form-control-sm" id="telefono" formControlName="telefono">
+
+        @if (formPaciente.get('telefono')?.errors?.['backendError']) {
+            <span class="text-danger" role="alert">
+                <strong>{{ formPaciente.get('telefono')?.errors?.['backendError'] }}</strong>
+            </span>
+        }
     </div>
     <div class="mb-3">
         <label for="fNacimiento" class="form-label">Fecha Nacimiento</label>
         <input type="date" class="form-control form-control-sm" id="fNacimiento" formControlName="fechaNacimiento">
+
+        @if (formPaciente.get('fNacimiento')?.errors?.['backendError']) {
+            <span class="text-danger" role="alert">
+                <strong>{{ formPaciente.get('fNacimiento')?.errors?.['backendError'] }}</strong>
+            </span>
+        }
     </div>
     <div class="mb-3">
         <label for="sexo" class="form-label">Sexo</label>
@@ -33,6 +63,12 @@
                 <option [ngValue]="s">{{s}}</option>
             }
         </select>
+
+        @if (formPaciente.get('sexo')?.errors?.['backendError']) {
+            <span class="text-danger" role="alert">
+                <strong>{{ formPaciente.get('sexo')?.errors?.['backendError'] }}</strong>
+            </span>
+        }
     </div>
 
     <!--Botones-->

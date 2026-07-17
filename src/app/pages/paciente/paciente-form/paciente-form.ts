@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {PacienteRequest, PacienteResponse, Sexo} from '../../../core/models/paciente-model';
 
@@ -14,6 +14,7 @@ export class PacienteForm implements OnChanges {
     listaSexo: Sexo[] = Object.values(Sexo);
     @Input() modo!: "crear" | "editar";
     @Input() paciente?: PacienteResponse;
+    @Input() erroresFormBackend?: Record<string, string[]>;
 
     @Output()
     guardarPaciente = new EventEmitter<PacienteRequest>();
@@ -36,7 +37,7 @@ export class PacienteForm implements OnChanges {
             {validators: [Validators.required]})
     })
 
-    ngOnChanges(): void {
+    ngOnChanges(changes:SimpleChanges): void {
         if (this.modo === "editar" && this.paciente) {
             this.formPaciente.patchValue({
                 nombre: this.paciente.nombre,
@@ -46,21 +47,31 @@ export class PacienteForm implements OnChanges {
                 fechaNacimiento: this.paciente.fechaNacimiento,
                 sexo: this.paciente.sexo
             });
-        } else {
-            this.formPaciente.reset();
+        }
+
+        if (changes['erroresFormBackend'] && this.erroresFormBackend) {
+            Object.keys(this.erroresFormBackend).forEach((campo: string) => {
+                const control = this.formPaciente.get(campo);
+                if (control) {
+                    control.setErrors({
+                        backendError: this.erroresFormBackend![campo][0]
+                    });
+                }
+            })
         }
     }
 
     enviarPaciente(): void {
         if (this.formPaciente.invalid) return;
-
         const formValues = this.formPaciente.getRawValue();
         const req: PacienteRequest = {
             ...formValues,
             sexo: formValues.sexo!
-        }
-
+        };
         this.guardarPaciente.emit(req);
+    }
+
+    limpiarForm(): void {
         this.formPaciente.reset();
     }
 }
