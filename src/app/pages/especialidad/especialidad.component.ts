@@ -84,6 +84,7 @@ export class EspecialidadComponent implements OnInit {
     // Modos de vista del Form
     modoCrear(): void {
         this.modoForm = "crear";
+        this.hijoForm.limpiarForm();
         this.especialidadSeleccionada = undefined;
     }
 
