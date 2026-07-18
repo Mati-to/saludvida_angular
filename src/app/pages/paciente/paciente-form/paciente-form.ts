@@ -1,6 +1,21 @@
-import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
+import {
+    Component, effect,
+    input,
+    InputSignal,
+    output,
+    OutputEmitterRef,
+} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {PacienteRequest, PacienteResponse, Sexo} from '../../../core/models/paciente-model';
+
+interface PacienteFormGroup {
+    nombre: FormControl<string>,
+    apellido: FormControl<string>,
+    rut: FormControl<string>,
+    telefono: FormControl<string | null>,
+    fechaNacimiento: FormControl<string>,
+    sexo: FormControl<Sexo | null>,
+}
 
 @Component({
   selector: 'app-paciente-form',
@@ -10,55 +25,45 @@ import {PacienteRequest, PacienteResponse, Sexo} from '../../../core/models/paci
   templateUrl: './paciente-form.html',
   styleUrl: './paciente-form.scss',
 })
-export class PacienteForm implements OnChanges {
+export class PacienteForm {
     listaSexo: Sexo[] = Object.values(Sexo);
-    @Input() modo!: "crear" | "editar";
-    @Input() paciente?: PacienteResponse;
-    @Input() erroresFormBackend?: Record<string, string[]>;
+    modo: InputSignal<"crear" | "editar"> = input.required<"crear" | "editar">();
+    paciente: InputSignal<PacienteResponse | undefined> = input<PacienteResponse | undefined>();
+    isSaveLoading: InputSignal<boolean> = input.required<boolean>();
 
-    @Output()
-    guardarPaciente = new EventEmitter<PacienteRequest>();
+    guardarPaciente: OutputEmitterRef<PacienteRequest> = output<PacienteRequest>();
+    cancelar: OutputEmitterRef<void> = output<void>();
 
-    @Output()
-    cancelar = new EventEmitter<void>();
-
-
-    formPaciente = new FormGroup({
+    formPaciente: FormGroup<PacienteFormGroup> = new FormGroup({
         nombre: new FormControl<string>("",
-            {nonNullable: true, validators: [Validators.required]}),
+            {nonNullable: true, validators: [Validators.required, Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ]{2,50}$/)]}),
         apellido: new FormControl<string>("",
-            {nonNullable: true, validators: [Validators.required]}),
+            {nonNullable: true, validators: [Validators.required, Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ]{2,50}$/)]}),
         rut: new FormControl<string>("",
-            {nonNullable: true, validators: [Validators.required]}),
-        telefono: new FormControl<string | null>("",),
+            {nonNullable: true, validators: [Validators.required, Validators.pattern(/^\d{7,8}-[0-9Kk]$/)]}),
+        telefono: new FormControl<string | null>("",
+            {validators: [Validators.pattern(/^[0-9]{9}$/)] }),
         fechaNacimiento: new FormControl<string>("",
             {nonNullable: true, validators: [Validators.required]}),
         sexo: new FormControl<Sexo | null>(null,
             {validators: [Validators.required]})
     })
 
-    ngOnChanges(changes:SimpleChanges): void {
-        if (this.modo === "editar" && this.paciente) {
-            this.formPaciente.patchValue({
-                nombre: this.paciente.nombre,
-                apellido: this.paciente.apellido,
-                rut: this.paciente.rut,
-                telefono: this.paciente.telefono,
-                fechaNacimiento: this.paciente.fechaNacimiento,
-                sexo: this.paciente.sexo
-            });
-        }
-
-        if (changes['erroresFormBackend'] && this.erroresFormBackend) {
-            Object.keys(this.erroresFormBackend).forEach((campo: string) => {
-                const control = this.formPaciente.get(campo);
-                if (control) {
-                    control.setErrors({
-                        backendError: this.erroresFormBackend![campo][0]
-                    });
-                }
-            })
-        }
+    constructor() {
+        // Form - Edición
+        effect((): void => {
+            const paciente: PacienteResponse | undefined = this.paciente();
+            if (this.modo() === "editar" && paciente) {
+                this.formPaciente.patchValue({
+                    nombre: paciente.nombre,
+                    apellido: paciente.apellido,
+                    rut: paciente.rut,
+                    telefono: paciente.telefono,
+                    fechaNacimiento: paciente.fechaNacimiento,
+                    sexo: paciente.sexo
+                });
+            }
+        });
     }
 
     enviarPaciente(): void {

@@ -6,12 +6,22 @@ export const globalErrorsInterceptor: HttpInterceptorFn = (
     req: HttpRequest<any>,
     next: HttpHandlerFn) => {
 
+    const ToastError = Swal.mixin({
+        toast: true,
+        position: 'top-right',
+        iconColor: 'white',
+        customClass: {
+            popup: 'colored-toast',
+            title: 'mb-0'
+        },
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true,
+    });
+
     return next(req).pipe(
         catchError((err: HttpErrorResponse) => {
-
-            if (err.status === 400 && err.error?.errores) {
-                return throwError((): HttpErrorResponse => err);
-            }
+            // TODO: Crear vista con error 404 y redireccionar hacia esa vista
 
             let mensaje: string = "Hubo un error inesperado.";
 
@@ -21,8 +31,8 @@ export const globalErrorsInterceptor: HttpInterceptorFn = (
                 mensaje = err.error.mensaje;
             }
 
-            void Swal.fire({
-                title: `Error ${err.error.status ?? ""}!`,
+            void ToastError.fire({
+                title: 'Error',
                 text: mensaje,
                 icon: 'error',
             });

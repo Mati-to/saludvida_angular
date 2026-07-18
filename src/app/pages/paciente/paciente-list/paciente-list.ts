@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, input, InputSignal, output, OutputEmitterRef} from '@angular/core';
 import {PacienteResponse} from '../../../core/models/paciente-model';
 
 @Component({
@@ -8,20 +8,17 @@ import {PacienteResponse} from '../../../core/models/paciente-model';
   styleUrl: './paciente-list.scss',
 })
 export class PacienteList {
-    @Input() pacientes: PacienteResponse[] = [];
+    pacientes: InputSignal<PacienteResponse[]> = input<PacienteResponse[]>([]);
+    isLoading: InputSignal<boolean> = input<boolean>(false);
 
-    @Output()
-    editarPacienteEvent = new EventEmitter<PacienteResponse>();
+    editarPacienteEvent: OutputEmitterRef<PacienteResponse> = output<PacienteResponse>();
+    eliminarPacienteEvent: OutputEmitterRef<PacienteResponse> = output<PacienteResponse>();
 
-    @Output()
-    eliminarPacienteEvent = new EventEmitter<PacienteResponse>();
-
-    solicitarEditar(paciente: PacienteResponse) {
+    solicitarEditar(paciente: PacienteResponse): void {
         this.editarPacienteEvent.emit(paciente);
     }
 
-    solicitarEliminar(paciente: PacienteResponse) {
+    solicitarEliminar(paciente: PacienteResponse): void {
         this.eliminarPacienteEvent.emit(paciente);
     }
-
 }

@@ -1,61 +1,55 @@
 
-<h4> {{ modo === 'crear' ? "Ingresar paciente" : "Editar paciente" }}</h4>
+<h4> {{ modo() === 'crear' ? "Ingresar paciente" : "Editar paciente" }}</h4>
 
 
 <form [formGroup]="formPaciente" (ngSubmit)="enviarPaciente()">
 
     <div class="mb-3">
-        <label for="nombre" class="form-label">Nombre</label>
+        <label for="nombre" class="form-label mb-0">Nombre</label>
         <input type="text" class="form-control form-control-sm" id="nombre" formControlName="nombre">
 
-        @if (formPaciente.get('nombre')?.errors?.['backendError']) {
-            <span class="text-danger" role="alert">
-                <strong>{{ formPaciente.get('nombre')?.errors?.['backendError'] }}</strong>
-            </span>
+        @if (formPaciente.get("nombre")?.errors?.["pattern"]) {
+            <p class="text-danger fw-ligth lh-sm fs-6" role="alert">
+                Debe tener entre 2-50 caracteres. Sin números ni caracteres especiales.
+            </p>
         }
     </div>
     <div class="mb-3">
-        <label for="apellido" class="form-label">Apellido</label>
+        <label for="apellido" class="form-label mb-0">Apellido</label>
         <input type="text" class="form-control form-control-sm" id="apellido" formControlName="apellido">
 
-        @if (formPaciente.get('apellido')?.errors?.['backendError']) {
-            <span class="text-danger" role="alert">
-                <strong>{{ formPaciente.get('apellido')?.errors?.['backendError'] }}</strong>
-            </span>
+        @if (formPaciente.get("apellido")?.errors?.["pattern"]) {
+            <p class="text-danger fw-ligth lh-sm fs-6" role="alert">
+                Debe tener entre 2-50 caracteres. Sin números ni caracteres especiales.
+            </p>
         }
     </div>
     <div class="mb-3">
-        <label for="rut" class="form-label">RUT</label>
-        <input type="text" class="form-control form-control-sm" id="rut" formControlName="rut">
+        <label for="rut" class="form-label mb-0">RUT</label>
+        <input type="text" class="form-control form-control-sm" id="rut" placeholder="11222333-k" formControlName="rut">
 
-        @if (formPaciente.get('rut')?.errors?.['backendError']) {
-            <span class="text-danger" role="alert">
-                <strong>{{ formPaciente.get('rut')?.errors?.['backendError'] }}</strong>
-            </span>
+        @if (formPaciente.get("rut")?.errors?.["pattern"]) {
+            <p class="text-danger fw-ligth lh-sm fs-6" role="alert">
+                RUT inválido.
+            </p>
         }
     </div>
     <div class="mb-3">
-        <label for="telefono" class="form-label">Teléfono</label>
+        <label for="telefono" class="form-label mb-0">Teléfono (opcional)</label>
         <input type="text" class="form-control form-control-sm" id="telefono" formControlName="telefono">
 
-        @if (formPaciente.get('telefono')?.errors?.['backendError']) {
-            <span class="text-danger" role="alert">
-                <strong>{{ formPaciente.get('telefono')?.errors?.['backendError'] }}</strong>
-            </span>
+        @if (formPaciente.get("telefono")?.errors?.["pattern"]) {
+            <p class="text-danger fw-ligth lh-sm fs-6" role="alert">
+                Teléfono inválido.
+            </p>
         }
     </div>
     <div class="mb-3">
-        <label for="fNacimiento" class="form-label">Fecha Nacimiento</label>
+        <label for="fNacimiento" class="form-label mb-0">Fecha Nacimiento</label>
         <input type="date" class="form-control form-control-sm" id="fNacimiento" formControlName="fechaNacimiento">
-
-        @if (formPaciente.get('fNacimiento')?.errors?.['backendError']) {
-            <span class="text-danger" role="alert">
-                <strong>{{ formPaciente.get('fNacimiento')?.errors?.['backendError'] }}</strong>
-            </span>
-        }
     </div>
     <div class="mb-3">
-        <label for="sexo" class="form-label">Sexo</label>
+        <label for="sexo" class="form-label mb-0">Sexo</label>
         <select name="sexo" id="sexo" class="form-select form-select-sm" formControlName="sexo">
             <option [ngValue]="null" disabled>Selecciona una opción</option>
 
@@ -63,12 +57,6 @@
                 <option [ngValue]="s">{{s}}</option>
             }
         </select>
-
-        @if (formPaciente.get('sexo')?.errors?.['backendError']) {
-            <span class="text-danger" role="alert">
-                <strong>{{ formPaciente.get('sexo')?.errors?.['backendError'] }}</strong>
-            </span>
-        }
     </div>
 
     <!--Botones-->
@@ -76,10 +64,10 @@
         <button
             type="submit"
             class="btn btn-primary"
-            [disabled]="!formPaciente.valid">
-            {{ modo === 'crear' ? "Ingresar" : "Guardar cambios" }}
+            [disabled]="isSaveLoading() || !formPaciente.valid">
+            {{ modo() === 'crear' ? "Ingresar" : "Guardar cambios" }}
         </button>
-        @if (modo === "editar") {
+        @if (modo() === "editar") {
             <button
                 type="button"
                 class="btn btn-secondary"
