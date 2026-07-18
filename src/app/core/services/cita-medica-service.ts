@@ -34,8 +34,8 @@ export class CitaMedicaService {
         return this.http.put<CitaMedicaListResponse>(`${this.apiUrl}/${id}`, cita);
     }
 
-    deleteById(id: number): Observable<Object> {
-        return this.http.delete<Object>(`${this.apiUrl}/${id}`);
+    deleteById(id: number): Observable<void> {
+        return this.http.delete<void>(`${this.apiUrl}/${id}`);
     }
 
 }

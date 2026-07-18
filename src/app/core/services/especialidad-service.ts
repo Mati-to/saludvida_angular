@@ -22,8 +22,8 @@ export class EspecialidadService {
         return this.http.put<EspecialidadResponse>(`${this.apiUrl}/${id}`, especialidad);
     }
 
-    deleteById(id: number): Observable<Object> {
-        return this.http.delete(`${this.apiUrl}/${id}`);
+    deleteById(id: number): Observable<void> {
+        return this.http.delete<void>(`${this.apiUrl}/${id}`);
     }
 
 }

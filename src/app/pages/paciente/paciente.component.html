@@ -2,7 +2,8 @@
     <div class="row">
         <app-paciente-list
             class="col-8"
-            [pacientes]="pacientes"
+            [pacientes]="pacientesResource.value()"
+            [isLoading]="pacientesResource.isLoading()"
             (editarPacienteEvent)="modoEditar($event)"
             (eliminarPacienteEvent)="modalConfirmarEliminar($event)">
         </app-paciente-list>
@@ -10,8 +11,8 @@
         <app-paciente-form
             class="col-4"
             [modo]="modoForm"
-            [erroresFormBackend]="erroresForm"
             [paciente]="pacienteSeleccionado"
+            [isSaveLoading]="isGuardarPacienteLoading"
             (cancelar)="modoCrear()"
             (guardarPaciente)="guardarPaciente($event)">
         </app-paciente-form>

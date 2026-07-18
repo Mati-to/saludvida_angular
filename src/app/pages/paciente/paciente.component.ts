@@ -1,11 +1,10 @@
-import {Component, inject, OnInit, ViewChild} from '@angular/core';
+import {Component, inject, ViewChild} from '@angular/core';
 import {PacienteList} from './paciente-list/paciente-list';
 import {PacienteForm} from './paciente-form/paciente-form';
 import {PacienteRequest, PacienteResponse} from '../../core/models/paciente-model';
 import {PacienteService} from '../../core/services/paciente-service';
 import Swal, {SweetAlertResult} from 'sweetalert2';
-import {HttpErrorResponse} from '@angular/common/http';
-import {ApiErrorModel} from '../../core/models/api-error-model';
+import {HttpResourceRef} from '@angular/common/http';
 
 @Component({
   selector: 'app-paciente',
@@ -16,30 +15,22 @@ import {ApiErrorModel} from '../../core/models/api-error-model';
   templateUrl: './paciente.component.html',
   styleUrl: './paciente.component.scss',
 })
-export class PacienteComponent implements OnInit {
-    pacienteSeleccionado: PacienteResponse | undefined;
-    pacientes: PacienteResponse[] = [];
-    erroresForm?: Record<string, string[]>;
+export class PacienteComponent {
+    pacienteSeleccionado?: PacienteResponse;
     modoForm: "crear" | "editar" = "crear";
+    isGuardarPacienteLoading: boolean = false;
 
     @ViewChild(PacienteForm) hijoForm!: PacienteForm;
 
     // DI
     pacienteService: PacienteService = inject(PacienteService);
 
-    ngOnInit(): void {
-        this.cargarListPacientes();
-    }
-
-    cargarListPacientes(): void {
-        this.pacienteService.getAll().subscribe(pacientes => {
-            this.pacientes = pacientes;
-        })
-    }
+    pacientesResource: HttpResourceRef<PacienteResponse[]> = this.pacienteService.getAllResource;
 
     // Guardar Paciente
     guardarPaciente(paciente: PacienteRequest): void {
         if (this.modoForm === "crear") {
+            this.isGuardarPacienteLoading = true;
             this.pacienteService.create(paciente).subscribe({
                 next: (paciente: PacienteResponse):void => {
                     void Swal.fire({
@@ -49,11 +40,9 @@ export class PacienteComponent implements OnInit {
                         timer: 2000
                     });
                     this.hijoForm.limpiarForm();
-                    this.cargarListPacientes();
+                    this.pacientesResource.reload();
                 },
-                error: (error: HttpErrorResponse): void => {
-                    this.enviarErroresValidacion(error);
-                }
+                complete: (): boolean => this.isGuardarPacienteLoading = false
             })
         }
 
@@ -69,12 +58,11 @@ export class PacienteComponent implements OnInit {
                     });
                     this.hijoForm.limpiarForm();
                     this.modoForm = "crear";
-                    this.cargarListPacientes();
+                    this.pacientesResource.reload();
                 },
-                error: error => console.error(error)
+                complete: (): boolean => this.isGuardarPacienteLoading = false
             })
         }
-
     }
 
     // Modos de vista del Form
@@ -83,7 +71,6 @@ export class PacienteComponent implements OnInit {
         this.hijoForm.limpiarForm();
         this.pacienteSeleccionado = undefined;
     }
-
     modoEditar(paciente: PacienteResponse): void {
         this.pacienteSeleccionado = paciente;
         this.modoForm = "editar";
@@ -109,20 +96,11 @@ export class PacienteComponent implements OnInit {
                                 text: "Paciente eliminado con éxito.",
                                 icon: "success"
                             });
-                            this.cargarListPacientes();
+                            this.pacientesResource.reload();
                         }
                     });
+
             }
         })
     }
-
-    // Errores
-    enviarErroresValidacion(error: HttpErrorResponse): void {
-        const apiError = error.error as ApiErrorModel;
-
-        if (apiError.errores) {
-            this.erroresForm= apiError.errores;
-        }
-    }
-
 }

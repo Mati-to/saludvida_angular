@@ -22,8 +22,8 @@ export class MedicoService {
         return this.http.put<MedicoResponse>(`${this.apiUrl}/${id}`, medico);
     }
 
-    deleteById(id: number): Observable<Object> {
-        return this.http.delete<Object>(`${this.apiUrl}/${id}`);
+    deleteById(id: number): Observable<void> {
+        return this.http.delete<void>(`${this.apiUrl}/${id}`);
     }
 
 }

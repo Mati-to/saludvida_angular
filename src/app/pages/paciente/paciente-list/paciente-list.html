@@ -4,39 +4,44 @@
     <div class="row">
         <table class="table table-striped">
             <thead>
-            <tr>
-                <th>Nombre completo</th>
-                <th>RUT</th>
-                <th>Edad</th>
-                <th>Sexo</th>
-                <th>Teléfono</th>
-            </tr>
+                <tr>
+                    <th>Nombre completo</th>
+                    <th>RUT</th>
+                    <th>Edad</th>
+                    <th>Sexo</th>
+                    <th>Teléfono</th>
+                    <th>Acciones</th>
+                </tr>
             </thead>
             <tbody>
-                @for (p of pacientes; track p.id) {
-                    <tr>
-                        <td>{{p.nombre}} {{p.apellido}}</td>
-                        <td>{{p.rut}}</td>
-                        <td>{{p.edad}}</td>
-                        <td>{{p.sexo}}</td>
-                        <td>{{p.telefono || "No registrado"}}</td>
-                        <td class="d-flex gap-2 justify-content-end">
-                            <button
-                                class="btn btn-sm btn-outline-secondary"
-                                (click)="solicitarEditar(p)">
-                                Editar
-                            </button>
-                            <button
-                                class="btn btn-sm btn-outline-danger"
-                                (click)="solicitarEliminar(p)">
-                                Eliminar
-                            </button>
-                        </td>
-                    </tr>
-                } @empty {
-                    <tr>
-                        <td colspan="6">No hay pacientes aun.</td>
-                    </tr>
+                @if (isLoading()) {
+                    <tr><td colspan="6">Cargando pacientes...</td></tr>
+                } @else {
+                    @for (p of pacientes(); track p.id) {
+                        <tr>
+                            <td>{{p.nombre}} {{p.apellido}}</td>
+                            <td>{{p.rut}}</td>
+                            <td>{{p.edad}}</td>
+                            <td>{{p.sexo}}</td>
+                            <td>{{p.telefono || "No registrado"}}</td>
+                            <td class="d-flex gap-2">
+                                <button
+                                    class="btn btn-sm btn-outline-secondary"
+                                    (click)="solicitarEditar(p)">
+                                    Editar
+                                </button>
+                                <button
+                                    class="btn btn-sm btn-outline-danger"
+                                    (click)="solicitarEliminar(p)">
+                                    Eliminar
+                                </button>
+                            </td>
+                        </tr>
+                    } @empty {
+                        <tr>
+                            <td colspan="6">No hay pacientes aun.</td>
+                        </tr>
+                    }
                 }
             </tbody>
         </table>
